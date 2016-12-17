@@ -1,0 +1,7 @@
+<div *ngIf="item">
+    <span>{{item.name}}</span>
+    <span>{{item.description}}</span>
+    <span>{{item._id}}</span>
+    <comments-list [itemId]="item._id"></comments-list>
+    <comments-form [itemId]="item._id"></comments-form>
+</div>

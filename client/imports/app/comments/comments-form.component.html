@@ -1,0 +1,12 @@
+        <form *ngIf="user" [formGroup]="addForm" (ngSubmit)="addComment()">
+          <div style="display: table-row">
+            <div class="form-inputs">
+              <md-input dividerColor="accent" formControlName="body" placeholder="Comment"></md-input>
+              <br/>
+              <button color="accent" md-raised-button type="submit">Comment</button>
+            </div>
+          </div>
+        </form>
+        <div *ngIf="!user">
+          Please login in order to comment!
+        </div>

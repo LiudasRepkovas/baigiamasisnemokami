@@ -1,0 +1,39 @@
+<div class="form-container">
+  <div class="container-background">
+    <div class="form-content">
+      <div class="form-center">
+        <h1>Your party is missing?</h1>
+        <h2>Add it now! ></h2>
+      </div>
+      <div class="form-center">
+        <form *ngIf="user" [formGroup]="addForm" (ngSubmit)="addItem(); upload.reset();">
+          <div style="display: table-row">
+            <div class="form-inputs">
+              <md-input dividerColor="accent" formControlName="name" placeholder="Party name"></md-input>
+              <br/>
+              <md-input dividerColor="accent" formControlName="description" placeholder="Description"></md-input>
+              <br/>
+              <input dividerColor="accent" #autocomplete id="autocomplete" formControlName="location" placeholder="Location name"/>
+              <br/>
+              <image-upload #upload (onFile)="onImage($event)"></image-upload>
+              <sebm-google-map class="new-party-map"
+                               [latitude]="location.lat"
+                               [longitude]="location.lng"
+                               [zoom]="8"
+                               (mapClick)="mapClicked($event)">
+                <sebm-google-map-marker
+                  [latitude]="location.lat"
+                  [longitude]="location.lng">
+                </sebm-google-map-marker>
+              </sebm-google-map>
+              <button color="accent" md-raised-button type="submit">Add my party!</button>
+            </div>
+          </div>
+        </form>
+        <div *ngIf="!user">
+          Please login in order to create new parties!
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
