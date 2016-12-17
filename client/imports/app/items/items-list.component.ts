@@ -38,6 +38,9 @@ export class ItemsListComponent implements OnInit, OnDestroy {
 
   pageSize: Subject<number> = new Subject<number>();
   curPage: Subject<number> = new Subject<number>();
+  order: Subject<number> = new Subject<number>();
+  searchQuery: Subject<string> = new Subject<string>();
+  category: Subject<string> = new Subject<string>();
 
   imagesSubs: Subscription;
 
@@ -50,12 +53,23 @@ export class ItemsListComponent implements OnInit, OnDestroy {
     this.optionsSub = Observable.combineLatest(
       this.pageSize,
       this.curPage,
-    ).subscribe(([pageSize, curPage]) => {
+      this.order,
+      this.searchQuery,
+      this.category,
+    ).subscribe(([pageSize, curPage, order, searchQuery, category]) => {
+      console.log("order as number");
+      console.log(order as number);
       var options: Options = {
         limit: pageSize as number,
-        skip: (curPage as number - 1) * (pageSize as number)
+        skip: (curPage as number - 1) * (pageSize as number),
+        sort: {timestamp: order as number}
       };
 
+      console.log("options");
+      console.log(options);
+
+      let query = {};
+      
      this.paginationService.setCurrentPage(this.paginationService.defaultId, curPage);
 
       if(this.itemsSub){
@@ -79,6 +93,9 @@ export class ItemsListComponent implements OnInit, OnDestroy {
 
     this.pageSize.next(10);
     this.curPage.next(1);
+    this.order.next(-1);
+    this.category.next('');
+    this.searchQuery.next('');
 
     this.autorunSub = MeteorObservable.autorun().subscribe(() => {
       this.itemsSize = Counts.get('numberOfItems');
@@ -90,6 +107,18 @@ export class ItemsListComponent implements OnInit, OnDestroy {
 
   onPageChanged(page: number): void {
     this.curPage.next(page);
+  }
+
+  onOrderChanged(order: any): void {
+    this.order.next(parseInt(order));
+  }
+
+  onCategoryChanged(category: string): void {
+    this.category.next(category);
+  }
+
+  onSearchQueryChanged(query: string): void {
+    this.searchQuery.next(query);
   }
 
   ngOnDestroy() {

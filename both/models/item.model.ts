@@ -11,4 +11,5 @@ export interface Item extends CollectionObject {
   active: boolean;
   deleted: boolean;
   expires: number;
+  address: string;
 }

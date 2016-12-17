@@ -14,11 +14,13 @@ import { AUTH_DECLARATIONS } from './auth';
 import { MaterialModule } from "@angular/material";
 import { SHARED_DECLARATIONS} from "./shared";
 import { FileDropModule } from "angular2-file-drop";
+import {GooglePlaceModule} from './downloaded/ng2-autocomplete/ng2-google-place.module';
 
 
 let moduleDefinition;
   moduleDefinition = {
     imports: [
+      GooglePlaceModule,
       Ng2PaginationModule,
       BrowserModule,
       RouterModule.forRoot(routes),
@@ -27,8 +29,7 @@ let moduleDefinition;
       ReactiveFormsModule,
       FileDropModule,
       AgmCoreModule.forRoot({
-        apiKey: 'AIzaSyBtTHC2jP9DhLSXmeOuY13O-L27lk4Dvrc',
-        libraries: ['places']
+        apiKey: 'AIzaSyBtTHC2jP9DhLSXmeOuY13O-L27lk4Dvrc'
       }),
     ],
     declarations: [

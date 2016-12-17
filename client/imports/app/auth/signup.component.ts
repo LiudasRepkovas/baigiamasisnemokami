@@ -18,6 +18,8 @@ export class SignupComponent implements OnInit {
   ngOnInit() {
     this.signupForm = this.formBuilder.group({
       email: ['', Validators.required],
+      name: ['', Validators.required],
+      phone: ['', Validators.required],
       password: ['', Validators.required]
     });
 
@@ -28,7 +30,11 @@ export class SignupComponent implements OnInit {
     if (this.signupForm.valid) {
       Accounts.createUser({
         email: this.signupForm.value.email,
-        password: this.signupForm.value.password
+        password: this.signupForm.value.password,
+        profile:{
+          name:this.signupForm.value.name,
+          phone:this.signupForm.value.phone
+        }
       }, (err) => {
         if (err) {
           this.zone.run(() => {

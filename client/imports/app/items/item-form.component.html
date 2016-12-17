@@ -6,32 +6,52 @@
         <h2>Add it now! ></h2>
       </div>
       <div class="form-center">
-        <form *ngIf="user" [formGroup]="addForm" (ngSubmit)="addItem(); upload.reset();">
+        <form *ngIf="!loading" [formGroup]="addForm" (ngSubmit)="addItem(); upload.reset(); resetImages();" (keydown.enter)="$event.preventDefault()">
           <div style="display: table-row">
             <div class="form-inputs">
               <md-input dividerColor="accent" formControlName="name" placeholder="Party name"></md-input>
               <br/>
               <md-input dividerColor="accent" formControlName="description" placeholder="Description"></md-input>
               <br/>
-              <input dividerColor="accent" #autocomplete id="autocomplete" formControlName="location" placeholder="Location name"/>
+              <input type="text" formControlName="location"
+                  (lat)='location.lat=$event' 
+                  (lng)='location.lng=$event' 
+                  (adr_address)='adress=$event' 
+                    id="autocomplete"
+                  ng2-google-place-autocomplete/> 
+              <br/>
+              <br/>
+              <select formControlName="category">
+                <option *ngFor="let category of categories" [value]="category._id">{{category.name}}</option>
+              </select>
               <br/>
               <image-upload #upload (onFile)="onImage($event)"></image-upload>
               <sebm-google-map class="new-party-map"
                                [latitude]="location.lat"
                                [longitude]="location.lng"
-                               [zoom]="8"
-                               (mapClick)="mapClicked($event)">
+                               [zoom]="8">
                 <sebm-google-map-marker
                   [latitude]="location.lat"
                   [longitude]="location.lng">
                 </sebm-google-map-marker>
               </sebm-google-map>
-              <button color="accent" md-raised-button type="submit">Add my party!</button>
+              <button color="accent" md-raised-button type="submit">Kurti skelbimą!</button>
             </div>
           </div>
         </form>
         <div *ngIf="!user">
-          Please login in order to create new parties!
+          Norėdami sukurti skelbimą privalote prisijungti!
+        </div>
+        <div *ngIf="loading" class="preloader-wrapper big active">
+          <div class="spinner-layer spinner-blue-only">
+            <div class="circle-clipper left">
+              <div class="circle"></div>
+            </div><div class="gap-patch">
+              <div class="circle"></div>
+            </div><div class="circle-clipper right">
+              <div class="circle"></div>
+            </div>
+          </div>
         </div>
       </div>
     </div>

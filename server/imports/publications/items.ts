@@ -3,7 +3,7 @@ import { Counts } from 'meteor/tmeasday:publish-counts';
 
 import { Items } from '../../../both/collections/items.collection';
 
-Meteor.publish('items', function(options) {
+Meteor.publish('items', function( options) {
   
   Counts.publish(this, 'numberOfItems', Items.collection.find({}), { noReady: true });
 
