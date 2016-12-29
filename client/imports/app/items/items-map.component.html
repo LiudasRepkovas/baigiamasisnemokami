@@ -1,0 +1,10 @@
+<sebm-google-map style="height:100%; width:100%;" class="all-items-map" 
+                               [latitude]="location.lat"
+                               [longitude]="location.lng"
+                               [zoom]="8">
+                <sebm-google-map-marker 
+                  *ngFor="let item of items "
+                  [latitude]="item.location.lat"
+                  [longitude]="item.location.lng">
+                </sebm-google-map-marker>
+              </sebm-google-map>

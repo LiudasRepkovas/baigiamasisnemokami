@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit, ElementRef, ViewChild } from '@angular/core';
+import { Component, OnInit, AfterViewInit, ElementRef, ViewChildren, QueryList } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Items } from '../../../../both/collections/items.collection';
 import { InjectUser } from "angular2-meteor-accounts-ui";
@@ -20,18 +20,21 @@ declare var google:any;
   styles: [ style ]
 })
 @InjectUser("user")
-export class ItemFormComponent implements OnInit, AfterViewInit {
+export class ItemFormComponent implements AfterViewInit, OnInit {
   
-  @ViewChild('autocomplete') autocompleteInput : ElementRef;
+  @ViewChildren('autocomplete') autocompleteInput : QueryList;
   addForm: FormGroup;
   images: string[] = [];
-  location: any = {lat: 54.687157, lng: 25.279652};
+  location: any ;
   address: any = "Vilnius, Lithuania";
   categories: any;
   loading: boolean;
+  categoriesSub:any;
 
   constructor(private formBuilder: FormBuilder,  private _loader: MapsAPILoader) {
-    this.loading = true;
+
+    this.location = {lat: 54.687157, lng: 25.279652};
+    this.loading = false;
     //TODO:padaryt kad lauktu kol suras useri bl
     //TODO:sutvarkyt kad gautu userio lokacija
 
@@ -46,7 +49,7 @@ export class ItemFormComponent implements OnInit, AfterViewInit {
     //TODO:get categories with method instead of subscription
   }
 
-  ngOnInit() {
+  ngOnInit(){
 
     this.addForm = this.formBuilder.group({
       name: ['', Validators.required],
@@ -54,14 +57,34 @@ export class ItemFormComponent implements OnInit, AfterViewInit {
       location: ['', Validators.required],
       category: ['', Validators.required]
     });
+
+    this.categoriesSub = MeteorObservable.subscribe('categories').subscribe(()=>{
+      this.categories = Categories.find({});
+    });
   }
 
   ngAfterViewInit(){
-    Meteor.call('getCategories', (error, result)=>{
-      this.categories = result;
-      this.loading = false;
-    });
+    this.autocomplete();
   }
+
+  autocomplete() {
+        this._loader.load().then(() => {
+            let autocomplete = new google.maps.places.Autocomplete(this.autocompleteInput.toArray()[0].nativeElement , {});
+            google.maps.event.addListener(autocomplete, 'place_changed', () => {
+                let place = autocomplete.getPlace();
+                console.log(place);
+                this.location = {
+                  lat:place.geometry.location.lat(),
+                  lng:place.geometry.location.lng()
+                }
+                this.address = place.formatted_address;
+
+                console.log(this.location);
+                console.log(this.address);
+            });
+        });
+}
+
 
   addItem(): void {
     if (!Meteor.userId()) {
@@ -70,7 +93,8 @@ export class ItemFormComponent implements OnInit, AfterViewInit {
     }
 
     if (this.addForm.valid) {
-      Items.insert({
+      
+      let item = {
         name: this.addForm.value.name,
         description: this.addForm.value.description,
         category: this.addForm.value.category,
@@ -82,10 +106,13 @@ export class ItemFormComponent implements OnInit, AfterViewInit {
         expires: _.now(),
         location: this.location,
         address: this.address
-      });
+      }
 
-      this.addForm.reset();
+      Items.insert(item).subscribe(()=>{
+        this.addForm.reset();
+      })
 
+      
     }
   }
 

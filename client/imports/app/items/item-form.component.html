@@ -13,28 +13,15 @@
               <br/>
               <md-input dividerColor="accent" formControlName="description" placeholder="Description"></md-input>
               <br/>
-              <input type="text" formControlName="location"
-                  (lat)='location.lat=$event' 
-                  (lng)='location.lng=$event' 
-                  (adr_address)='adress=$event' 
-                    id="autocomplete"
-                  ng2-google-place-autocomplete/> 
+              <input type="text" formControlName="location" id="autocomplete" #autocomplete/> 
               <br/>
               <br/>
               <select formControlName="category">
-                <option *ngFor="let category of categories" [value]="category._id">{{category.name}}</option>
+                <option value="">Pasirinkite kategoriją</option>
+                <option *ngFor="let category of categories|async" [value]="category._id">{{category.name}}</option>
               </select>
               <br/>
               <image-upload #upload (onFile)="onImage($event)"></image-upload>
-              <sebm-google-map class="new-party-map"
-                               [latitude]="location.lat"
-                               [longitude]="location.lng"
-                               [zoom]="8">
-                <sebm-google-map-marker
-                  [latitude]="location.lat"
-                  [longitude]="location.lng">
-                </sebm-google-map-marker>
-              </sebm-google-map>
               <button color="accent" md-raised-button type="submit">Kurti skelbimą!</button>
             </div>
           </div>
@@ -42,17 +29,7 @@
         <div *ngIf="!user">
           Norėdami sukurti skelbimą privalote prisijungti!
         </div>
-        <div *ngIf="loading" class="preloader-wrapper big active">
-          <div class="spinner-layer spinner-blue-only">
-            <div class="circle-clipper left">
-              <div class="circle"></div>
-            </div><div class="gap-patch">
-              <div class="circle"></div>
-            </div><div class="circle-clipper right">
-              <div class="circle"></div>
-            </div>
-          </div>
-        </div>
+        <md-spinner *ngIf="loading" class="preloader-wrapper big active"></md-spinner>
       </div>
     </div>
   </div>

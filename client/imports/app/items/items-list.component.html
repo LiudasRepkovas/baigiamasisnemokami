@@ -1,22 +1,68 @@
-<div>
-     <md-card class="filter-card">
-      <h3>Filter Items</h3>
-      <form>
-        <select (change)="onOrderChanged($event.target.value)">
-          <option value=-1>Naujausi viršuje</option>
-          <option value=1>Seniausi viršuje</option>
-        </select>
+<div class="item-list">
+    <md-card class="map">
+      <sebm-google-map class="all-items-map" 
+        [latitude]="55.1684581"
+        [longitude]="22.7739322"
+        [zoom]="7">
+        <div *ngFor="let item of locations">
+          <sebm-google-map-marker
+          *ngIf="item.location.lat"
+          [latitude]="item.location.lat"
+          [longitude]="item.location.lng">
+          </sebm-google-map-marker>
+        </div>
+      </sebm-google-map>
+    </md-card>
+    <md-card class="filter-card">
+      <h3>Filtruoti skelbimus:</h3>
+      <form>       
+        <md-grid-list cols="3" rowHeight="65px">
+          <md-grid-tile>
+            <md-select  [formControl]="categoryInput" (change)="onCategoryChanged($event.target.value)" placeholder="Kategorija">
+              <md-option value="">
+                Visos kategorijos
+              </md-option>
+              <md-option  *ngFor="let category of categories" [value]="category._id">
+                {{category.name}}
+              </md-option>
+            </md-select>
+          </md-grid-tile>
+          <md-grid-tile>
+            <md-select [formControl]="orderInput" placeholder="Rikiavimas">
+              <md-option value=-1>Naujausi viršuje</md-option>
+              <md-option value=1>Seniausi viršuje</md-option>
+            </md-select>
+          </md-grid-tile>
+          <md-grid-tile>
+            <md-input-container>
+              <input md-input placeholder="Paieškos tekstas" type="text" [formControl]="searchInput">
+            </md-input-container>
+          </md-grid-tile>
+        </md-grid-list>
       </form>
     </md-card>
     <pagination-controls class="pagination" (pageChange)="onPageChanged($event)"></pagination-controls>
-    <md-card *ngFor="let item of items | async" class="party-card">
-      <img *ngIf="item.images && item.images.length > 0" class="party-main-image" [src]="item | displayMainImage">
-      <h2 class="party-name">
-        <a [routerLink]="['/item/id', item._id]">{{item.name}}</a>
-      </h2>
-      <br />
-      {{item.description}}
-    </md-card>
+    <div class="cards-wrapper" *ngIf="!loading">
+      <md-card *ngFor="let item of items|async" class="item-card">
+        <md-card-title>
+          <a [routerLink]="['/item/id', item._id]">{{item.name}}</a>
+        </md-card-title>
+      
+        <img md-card-image *ngIf="item.images && item.images.length > 0" [src]="item | displayMainImage">
+        <img md-card-image *ngIf="!item.images || item.images.length <= 0" src="img/noimage2.png">
+        <md-card-subtitle>
+          <div class="info">
+            <span class="category">{{item.category.name}}</span>
+            <span class="date">{{item.timestamp | amTimeAgo}}</span>
+          </div>
+      	</md-card-subtitle>
+        <md-card-content>	
+          {{item.description | truncate : 200 : '...'}}
+        </md-card-content>
+      </md-card>
+    </div>
+    <md-spinner *ngIf="loading"></md-spinner>
+    
 
     <pagination-controls class="pagination" (pageChange)="onPageChanged($event)"></pagination-controls> 
-</div>
+</div> 

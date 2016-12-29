@@ -14,8 +14,12 @@ import { AUTH_DECLARATIONS } from './auth';
 import { MaterialModule } from "@angular/material";
 import { SHARED_DECLARATIONS} from "./shared";
 import { FileDropModule } from "angular2-file-drop";
-import {GooglePlaceModule} from './downloaded/ng2-autocomplete/ng2-google-place.module';
+import { GooglePlaceModule } from './downloaded/ng2-autocomplete/ng2-google-place.module';
+import { TimeAgoPipe } from './pipes/timeAgo.pipe';
+import { TruncatePipe } from 'angular2-truncate';
 
+
+import { HelperService } from './services/helper.service';
 
 let moduleDefinition;
   moduleDefinition = {
@@ -29,7 +33,8 @@ let moduleDefinition;
       ReactiveFormsModule,
       FileDropModule,
       AgmCoreModule.forRoot({
-        apiKey: 'AIzaSyBtTHC2jP9DhLSXmeOuY13O-L27lk4Dvrc'
+        apiKey: 'AIzaSyBtTHC2jP9DhLSXmeOuY13O-L27lk4Dvrc',
+        libraries: ['places']
       }),
     ],
     declarations: [
@@ -38,9 +43,11 @@ let moduleDefinition;
       ...ITEMS_DECLARATIONS,
       ...COMMENTS_DECLARATIONS,
       ...SHARED_DECLARATIONS,
+      TimeAgoPipe,
+      TruncatePipe
     ],
     providers: [
-     
+      [HelperService]
     ],
     bootstrap: [AppComponent]
   }
