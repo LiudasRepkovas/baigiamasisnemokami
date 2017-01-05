@@ -9,7 +9,6 @@ import {Categories} from "../../../../both/collections/categories.collection";
 import {Counts} from "meteor/tmeasday:publish-counts";
 import {InjectUser} from "angular2-meteor-accounts-ui";
 import {FormControl} from '@angular/forms';
-import {HelperService} from '../services/helper.service';
 
 import * as _ from 'lodash';
 import 'rxjs/add/operator/combineLatest';
@@ -60,7 +59,7 @@ export class ItemsListComponent implements OnInit, OnDestroy {
 
   imagesSubs: Subscription;
 
-  constructor(private paginationService: PaginationService, private helper: HelperService) {
+  constructor(private paginationService: PaginationService) {
   }
 
   ngOnInit() {

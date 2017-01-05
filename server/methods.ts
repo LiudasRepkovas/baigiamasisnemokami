@@ -10,5 +10,9 @@ Meteor.methods({
   },
   getItemLocations() {
     return Items.find({}, {fields:{location:1}}).fetch();
+  },
+  insertItem(item){
+    Items.insert(item);
+    return true;
   }
 });

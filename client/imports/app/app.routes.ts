@@ -12,9 +12,9 @@ import { LoginComponent } from './auth/login.component.web';
 export const routes: Route[] = [
   { path: '', component: ItemsListComponent },
   { path: 'item/id/:itemId', component: ItemDetailsComponent },
+  { path: 'item/edit/:itemId', component: ItemFormComponent },
   { path: 'item/new', component: ItemFormComponent },
   { path: 'signup', component: SignupComponent },
   { path: 'recover', component: RecoverComponent },
   { path: 'login', component: LoginComponent } 
-
 ];

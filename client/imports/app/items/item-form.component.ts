@@ -2,11 +2,13 @@ import { Component, OnInit, AfterViewInit, ElementRef, ViewChildren, QueryList }
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Items } from '../../../../both/collections/items.collection';
 import { InjectUser } from "angular2-meteor-accounts-ui";
+import { ActivatedRoute } from '@angular/router';
 import * as _ from "lodash";
 import { MapsAPILoader } from 'angular2-google-maps/core';
 import {Subject, Subscription, Observable} from "rxjs";
 import {MeteorObservable} from "meteor-rxjs";
 import {Categories} from "../../../../both/collections/categories.collection";
+import {Images} from "../../../../both/collections/images.collection";
 
 import template from './item-form.component.html';
 import style from './item-form.component.scss';
@@ -24,14 +26,19 @@ export class ItemFormComponent implements AfterViewInit, OnInit {
   
   @ViewChildren('autocomplete') autocompleteInput : QueryList;
   addForm: FormGroup;
-  images: string[] = [];
+  images: any[] = [];
   location: any ;
   address: any = "Vilnius, Lithuania";
   categories: any;
   loading: boolean;
   categoriesSub:any;
+  paramsSub:any;
+  itemId:any;
+  item:any;
+  itemSub:any;
+  imagesSubs:any;
 
-  constructor(private formBuilder: FormBuilder,  private _loader: MapsAPILoader) {
+  constructor(private formBuilder: FormBuilder,  private _loader: MapsAPILoader, private route: ActivatedRoute) {
 
     this.location = {lat: 54.687157, lng: 25.279652};
     this.loading = false;
@@ -45,23 +52,32 @@ export class ItemFormComponent implements AfterViewInit, OnInit {
             lng: userLocation.longitude
           };
     }
-
-    //TODO:get categories with method instead of subscription
   }
 
   ngOnInit(){
 
-    this.addForm = this.formBuilder.group({
-      name: ['', Validators.required],
-      description: ['', Validators.required],
-      location: ['', Validators.required],
-      category: ['', Validators.required]
-    });
+    // this.paramsSub = this.route.params.map(params => params['itemId']).subscribe(itemId => {this.itemId = itemId;});
 
-    this.categoriesSub = MeteorObservable.subscribe('categories').subscribe(()=>{
-      this.categories = Categories.find({});
-    });
+    // if(this.itemId){
+    //   this.itemSub = MeteorObservable.subscribe('item', this.itemId).subscribe(() => {
+    //     this.item = Items.findOne({_id:this.itemId});
+    //     console.log(this.item);
+    //   });
+    // } 
+
+    // this.addForm = this.formBuilder.group({
+    //   name: ['', Validators.required],
+    //   description: ['', Validators.required],
+    //   location: ['', Validators.required],
+    //   category: ['', Validators.required]
+    // });
+
+    // this.categoriesSub = MeteorObservable.subscribe('categories').subscribe(()=>{
+    //   this.categories = Categories.find({});
+    // });
   }
+
+    
 
   ngAfterViewInit(){
     this.autocomplete();
@@ -108,11 +124,13 @@ export class ItemFormComponent implements AfterViewInit, OnInit {
         address: this.address
       }
 
-      Items.insert(item).subscribe(()=>{
+      Meteor.call('insertItem', item).subscribe(()=>{
         this.addForm.reset();
       })
 
-      
+      // Items.insert(item).subscribe(()=>{
+      //   this.addForm.reset();
+      // })
     }
   }
 

@@ -5,7 +5,6 @@ import { ImageUploadComponent } from './image-upload.component';
 import { ItemsMapComponent } from './items-map.component';
 
 export const ITEMS_DECLARATIONS = [
-  ItemsMapComponent,
   ItemsListComponent,
   ItemDetailsComponent,
   ItemFormComponent,

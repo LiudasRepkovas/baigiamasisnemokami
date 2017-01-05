@@ -1,5 +1,8 @@
 <div class="item-list">
     <md-card class="map">
+      <md-toolbar class="md-primary" color="primary">
+        Skelbimų žemėlapis
+      </md-toolbar>
       <sebm-google-map class="all-items-map" 
         [latitude]="55.1684581"
         [longitude]="22.7739322"
@@ -14,7 +17,9 @@
       </sebm-google-map>
     </md-card>
     <md-card class="filter-card">
-      <h3>Filtruoti skelbimus:</h3>
+      <md-toolbar class="md-primary" color="primary">
+        Filtruoti skelbimus
+      </md-toolbar>
       <form>       
         <md-grid-list cols="3" rowHeight="65px">
           <md-grid-tile>
@@ -41,15 +46,31 @@
         </md-grid-list>
       </form>
     </md-card>
-    <pagination-controls class="pagination" (pageChange)="onPageChanged($event)"></pagination-controls>
-    <div class="cards-wrapper" *ngIf="!loading">
+    <md-card class="cards-wrapper" *ngIf="!loading">
+      <md-toolbar class="md-primary" color="primary">
+        Skelbimai
+      </md-toolbar>
+      <pagination-controls class="pagination" (pageChange)="onPageChanged($event)"></pagination-controls>
+
+      <!--<div class="item-row" *ngFor="let item of items|async">
+        <div class="image">
+          <img md-list-avatar *ngIf="item.images && item.images.length > 0" [src]="item | displayMainImage">
+          <img md-list-avatar *ngIf="!item.images || item.images.length <= 0" src="img/noimage2.png">
+        </div>
+        <div class="item-info">
+          <h3>{{item.name}}</h3>
+          <p>Kategorija: {{item.category.name}}, Sukurta {{item.timestamp | amTimeAgo}}</p>
+          <p>{{item.description | truncate : 200 : '...'}}</p>
+        </div>
+      </div>-->
       <md-card *ngFor="let item of items|async" class="item-card">
         <md-card-title>
           <a [routerLink]="['/item/id', item._id]">{{item.name}}</a>
         </md-card-title>
-      
-        <img md-card-image *ngIf="item.images && item.images.length > 0" [src]="item | displayMainImage">
-        <img md-card-image *ngIf="!item.images || item.images.length <= 0" src="img/noimage2.png">
+        <div class="image-wrapper">
+          <img *ngIf="item.images && item.images.length > 0" [src]="item | displayMainImage">
+          <img *ngIf="!item.images || item.images.length <= 0" src="img/noimage2.png">
+        </div>
         <md-card-subtitle>
           <div class="info">
             <span class="category">{{item.category.name}}</span>
@@ -60,9 +81,10 @@
           {{item.description | truncate : 200 : '...'}}
         </md-card-content>
       </md-card>
-    </div>
-    <md-spinner *ngIf="loading"></md-spinner>
+        <pagination-controls class="pagination" (pageChange)="onPageChanged($event)"></pagination-controls>
+        <md-spinner *ngIf="loading"></md-spinner>
+    </md-card>
     
 
-    <pagination-controls class="pagination" (pageChange)="onPageChanged($event)"></pagination-controls> 
+     
 </div> 

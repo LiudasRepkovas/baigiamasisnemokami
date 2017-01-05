@@ -3,7 +3,7 @@
        [ngClass]="{'file-is-over': fileIsOver, 'file-uploading': uploading}"
        (fileOver)="fileOver($event)"
        (onFileDrop)="onFileDrop($event)">
-    <div>Drop an image to here</div>
+    <div>Tempkite nuotraukas čia</div>
   </div>
   <div *ngIf="thumbs" class="thumbs">
     <div *ngFor="let thumb of thumbs | async" class="thumb">

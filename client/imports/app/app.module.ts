@@ -17,13 +17,15 @@ import { FileDropModule } from "angular2-file-drop";
 import { GooglePlaceModule } from './downloaded/ng2-autocomplete/ng2-google-place.module';
 import { TimeAgoPipe } from './pipes/timeAgo.pipe';
 import { TruncatePipe } from 'angular2-truncate';
+import { Autosize } from './downloaded/autosize/autosize';  
+import {KSSwiperModule} from 'angular2-swiper';
+import {CloudinaryImageComponent} from 'ng2-cloudinary';
 
-
-import { HelperService } from './services/helper.service';
 
 let moduleDefinition;
   moduleDefinition = {
     imports: [
+      KSSwiperModule,
       GooglePlaceModule,
       Ng2PaginationModule,
       BrowserModule,
@@ -44,11 +46,12 @@ let moduleDefinition;
       ...COMMENTS_DECLARATIONS,
       ...SHARED_DECLARATIONS,
       TimeAgoPipe,
-      TruncatePipe
+      TruncatePipe,
+      Autosize,
+      CloudinaryImageComponent,
+
     ],
-    providers: [
-      [HelperService]
-    ],
+    providers: [],
     bootstrap: [AppComponent]
   }
 

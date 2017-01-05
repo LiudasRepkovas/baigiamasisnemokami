@@ -13,3 +13,6 @@ Meteor.publish('thumbs', function(ids: string[]) {
 Meteor.publish('images', function() {
   return Images.collection.find({});
 });
+Meteor.publish('item_images', function(images) {
+  return Images.collection.find({_id:{$in:images}});
+});

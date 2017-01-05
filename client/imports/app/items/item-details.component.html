@@ -1,7 +1,24 @@
-<div *ngIf="item">
-    <span>{{item.name}}</span>
-    <span>{{item.description}}</span>
-    <span>{{item._id}}</span>
-    <comments-list [itemId]="item._id"></comments-list>
-    <comments-form [itemId]="item._id"></comments-form>
-</div>
+<md-card class="item" *ngIf="item">
+    <h2>{{item.name}}</h2>
+    <a *ngIf="item.owner == user._id" [routerLink]="['/item/edit/', item._id]">Keisti</a>
+
+    <div *ngIf="selectedImage" class="image-preview">
+        <img [src]="selectedImage.url">
+    </div>
+    <div *ngIf="item.images && item.images.length > 1" class="item-photos">
+        <div *ngFor="let image of images" class="small-image-wrapper">
+            <img  (click)="setPreview(image)" class="swiper-image" [src]="image.url">
+        </div>
+    </div>
+    <div class="info">
+        <span class="category">{{item.category.name}}</span>
+        <span class="date">{{item.timestamp | amTimeAgo}}</span>
+    </div>
+    <p>{{item.description}}</p>
+    
+    <div class="comments">
+        <h3>Komentarai:</h3>
+        <comments-list [itemId]="item._id"></comments-list>
+        <comments-form [itemId]="item._id"></comments-form>
+    </div>
+</md-card>
