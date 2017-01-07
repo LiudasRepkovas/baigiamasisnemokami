@@ -1,7 +1,7 @@
 <md-card class="form-center">
   <h2 *ngIf="!item">Naujas skelbimas</h2>
   <h2 *ngIf="item">Atnaujinti skelbimą</h2>
-  <form *ngIf="!loading && user && !item" [formGroup]="addForm" (ngSubmit)="addItem(); upload.reset(); resetImages();" (keydown.enter)="$event.preventDefault()">
+  <form *ngIf="!loading && user" [formGroup]="addForm" (ngSubmit)="addItem(); upload.reset(); resetImages();" (keydown.enter)="$event.preventDefault()">
     <div>
       <md-input-container>
         <input md-input dividerColor="accent" formControlName="name" placeholder="Pavadinimas">
@@ -13,13 +13,13 @@
       </md-input-container>
     </div>
     <div>
-      <md-input-container>
+      <md-input-container floatingPlaceholder="false">
         <input md-input type="text" formControlName="location" id="autocomplete" #autocomplete placeholder="Adresas"/> 
       </md-input-container>
     </div>
     <div>
-      <md-select formControlName="category" placeholder="Kategorija">
-        <md-option *ngFor="let category of categories|async" [value]="category._id">{{category.name}}</md-option>
+      <md-select floatingPlaceholder="false" formControlName="category" placeholder="Kategorija">
+        <md-option *ngFor="let cat of categories|async" [value]="cat._id">{{cat.name}}</md-option>
       </md-select>
     </div>
     <image-upload #upload (onFile)="onImage($event)"></image-upload>
@@ -27,34 +27,11 @@
       <button md-button color="accent" md-raised-button type="submit">Kurti skelbimą!</button	>
     </div>
   </form>
-  <form *ngIf="!loading && user && item" [formGroup]="addForm" (ngSubmit)="updateItem();" (keydown.enter)="$event.preventDefault()">
-    <div>
-      <md-input-container>
-        <input md-input dividerColor="accent" formControlName="name" placeholder="Pavadinimas" [value]="item.name">
-      </md-input-container>
-    </div>
-    <div>
-      <md-input-container>
-        <textarea autosize md-input  rows="2" dividerColor="accent" formControlName="description" placeholder="Aprašymas" [value]="item.description">
-      </md-input-container>
-    </div>
-    <div>
-      <md-input-container>
-        <input md-input type="text" formControlName="location" [value]="item.address" id="autocomplete" #autocomplete placeholder="Adresas"/> 
-      </md-input-container>
-    </div>
-    <div>
-      <md-select formControlName="category" placeholder="Kategorija" [value]="item.category">
-        <md-option *ngFor="let category of categories|async" [value]="category._id">{{category.name}}</md-option>
-      </md-select>
-    </div>
-    <image-upload #upload (onFile)="onImage($event)"></image-upload>
-    <div style="text-align:center">
-      <button md-button color="accent" md-raised-button type="submit">Išsaugoti pakeitimus.</button	>
-    </div>
-  </form>
   <div *ngIf="!user">
     Norėdami sukurti skelbimą privalote prisijungti!
+  </div>
+  <div *ngIf="item && item.owner != user._id">
+    Negalite keisti ne savo skelbimo!
   </div>
   <md-spinner *ngIf="loading" class="preloader-wrapper big active"></md-spinner>
 </md-card>

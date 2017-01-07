@@ -1,9 +1,10 @@
 @import '../node_modules/@angular/material/core/theming/all-theme';
 
 @include md-core();
-$app-primary: md-palette($md-light-blue, 500, 100, 700);
-$app-accent:  md-palette($md-pink, A200, A100, A400);
-$app-warn:    md-palette($md-red);
+
+$app-primary: md-palette($md-green, 500, 100, 700);
+$app-accent:  md-palette($md-light-green, A200, A100, A400);
+$app-warn:    md-palette($md-deep-orange);
 $app-theme: md-light-theme($app-primary, $app-accent, $app-warn);
 @include angular-material-theme($app-theme);
 
@@ -25,11 +26,6 @@ body.mobile {
 body.web {
   overflow: visible;
   position: initial;
-}
-
-.sebm-google-map-container {
-  width: 450px;
-  height: 450px;
 }
 
 .md-whiteframe-z2 {

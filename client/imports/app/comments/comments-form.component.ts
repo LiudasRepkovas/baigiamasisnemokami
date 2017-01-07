@@ -33,13 +33,13 @@ export class CommentsFormComponent implements OnInit {
     }
 
     if (this.addForm.valid) {
-      Comments.insert({
+      Meteor.call('insertComment', {
         body: this.addForm.value.body,
         item: this.itemId,
         owner: Meteor.userId(),
         timestamp: _.now(),
         deleted: false
-      });
+      })
 
       this.addForm.reset();
     }

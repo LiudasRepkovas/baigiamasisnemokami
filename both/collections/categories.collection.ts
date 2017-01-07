@@ -14,3 +14,4 @@ Categories.allow({
   update: admin,
   remove: admin
 });
+

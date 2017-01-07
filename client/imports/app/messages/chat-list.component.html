@@ -1,0 +1,8 @@
+<md-card class="chat-list">
+    <md-toolbar color="primary">
+        Susirašinėjimų sąrašas
+    </md-toolbar>
+    <div *ngFor="let group of messageGroups | keys">
+        {{group.value[0].from}}
+    </div>
+</md-card>

@@ -1,0 +1,79 @@
+<div class="row">
+  <div class="col-xs-12">
+    <div class="box">
+      <div class="box-header">
+        <div class="row">
+          <div class="col-xs-6">
+            <h3 class="box-title">Users</h3>
+          </div>
+          <div class="col-xs-6">
+            <button routerLink="/admin/users/create" type="button" class="btn btn-success pull-right">Create new</button>
+          </div>
+        </div>
+      </div>
+      <!-- /.box-header -->
+      <div class="box-body">
+        <div class="table-responsive">
+          <table class="table table-bordered table-hover table-striped">
+            <thead>
+              <tr>
+                <th class="hidden">ID</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Mentor</th>
+                <th>Created at</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let row of rows">
+                <td *ngFor="let col of row; let i = index" [class.hidden]="i == 0">{{col}}</td>
+                <!-- Additional actions -->
+                <td>
+                  <button class="btn btn-info" [routerLink]="['/admin/users/edit', row[0]]">Edit</button>
+                  <button class="btn btn-danger" (click)="targetForRemoval(row[0]); smModal.show()">Remove</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <pagination class="pagination-sm"
+        [(ngModel)]="page"
+        [totalItems]="length"
+        [itemsPerPage]="itemsPerPage"
+        [maxSize]="maxSize"
+        [boundaryLinks]="true"
+        [rotate]="false"
+        (pageChanged)="onChangeTable($event)"
+        (numPages)="numPages = $event">
+        </pagination>
+      </div>
+      <!-- /.box-body -->
+
+      <div bsModal #smModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-sm">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" aria-label="Close" (click)="smModal.hide()">
+                <span aria-hidden="true">&times;</span>
+              </button>
+              <h4 class="modal-title">Remove user?</h4>
+            </div>
+            <div class="modal-body">
+              Do you really want to delete this user?
+            </div>
+            <div class="modal-footer">
+              <button class="btn btn-default" (click)="smModal.hide()">Cancel</button>
+              <button class="btn btn-danger" (click)="remove(); smModal.hide()">Remove</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <!-- /.box -->
+  </div>
+  <!-- /.col -->
+</div>
+<!-- /.row -->

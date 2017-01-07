@@ -1,0 +1,42 @@
+<md-card class="user-info">
+    <md-toolbar class="md-primary" color="primary">
+        Naudotojo profilis
+    </md-toolbar>
+    <div *ngIf="userDisplayed && user._id != userId">
+        <h2>Vardas: {{user.profile.name}}</h2>
+        <h2>Telefono numeris: {{user.profile.phone}}</h2>
+        <h2>El.paštas: {{user.emails[0].address}}</h2>
+        <a md-button href="pm">Rašyti asmeninę žinutę</a> 
+    </div>    
+    <div *ngIf="userDisplayed && user._id == userId">
+        <h2>Vardas: {{user.profile.name}}</h2>
+        <h2>Telefono numeris: {{user.profile.phone}}</h2>
+        <h2>El.paštas: {{user.emails[0].address}}</h2>
+        <button  md-button color="primary">Saugoti</button> 
+    </div>
+
+</md-card>
+
+<md-card class="user-items">
+    <md-toolbar  class="md-primary"  color="primary">
+        Naudotojo skelbimai
+    </md-toolbar>
+    <md-card *ngFor="let item of items|async" class="item-card">
+        <md-card-title>
+            <a [routerLink]="['/item/id', item._id]">{{item.name}}</a>
+        </md-card-title>
+        <div class="image-wrapper">
+            <img *ngIf="item.images && item.images.length > 0" [src]="item | displayMainImage">
+            <img *ngIf="!item.images || item.images.length <= 0" src="img/noimage2.png">
+        </div>
+        <md-card-subtitle>
+            <div class="info">
+                <span class="category">{{item.category.name}}</span>
+                <span class="date">{{item.timestamp | amTimeAgo}}</span>
+            </div>
+        </md-card-subtitle>
+        <md-card-content>	
+            {{item.description | truncate : 200 : '...'}}
+        </md-card-content>
+    </md-card>
+</md-card>

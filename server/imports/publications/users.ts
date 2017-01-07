@@ -15,4 +15,16 @@ Meteor.publish('uninvited', function (partyId: string) {
       $ne: this.userId
     }
   });
+
+
 });
+
+Meteor.publish('user', function(userId: string){
+  return Meteor.users.find({_id:userId});
+})
+
+
+Meteor.publish('users', function(){
+  return Meteor.users.find({});
+})
+

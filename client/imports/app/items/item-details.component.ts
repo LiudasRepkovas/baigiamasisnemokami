@@ -26,7 +26,7 @@ import style from './item-details.component.scss';
 
 })
 @InjectUser('user')
-export class ItemDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
+export class ItemDetailsComponent implements OnInit, OnDestroy {
 
   itemId: string;
   paramsSub: Subscription;
@@ -39,6 +39,8 @@ export class ItemDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
   selectedImage:any;
   categories:any;
   categoriesSub:any;
+  owner:any;
+  ownerSub: any;
 
   constructor(
     private route: ActivatedRoute
@@ -72,6 +74,13 @@ export class ItemDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
 
             console.log(this.item);
 
+            if(this.item.owner){
+              this.ownerSub = MeteorObservable.subscribe('user', this.item.owner).subscribe(()=>{
+                this.owner = Users.findOne({_id:this.item.owner});
+                console.log(this.owner);
+              });
+            } 
+
             if(this.item.images && this.item.images.length > 0){
               this.imagesSubs = MeteorObservable.subscribe('item_images', this.item.images).subscribe(()=>{
                 this.images = Images.find({}).fetch();
@@ -80,10 +89,6 @@ export class ItemDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
             }
         });
       });
-  }
-
-  ngAfterViewInit(){
-    
   }
 
   setPreview(image){

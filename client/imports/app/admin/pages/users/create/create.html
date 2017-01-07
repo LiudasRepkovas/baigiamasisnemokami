@@ -1,0 +1,56 @@
+<div class="row">
+  <div class="col-xs-12">
+    <div class="box">
+      <div class="box-header">
+        <h3 class="box-title"></h3>
+      </div>
+      <!-- /.box-header -->
+      <div class="box-body">
+        <form (ngSubmit)="create()" #createForm="ngForm" autocomplete="off">
+          <legend>Create user</legend>
+
+          <div class="alert alert-warning">
+            Created user password will be same as his email address. Tell them to change it once they log in.
+            Activation email will be send to their email address.
+          </div>
+
+          <div class="row">
+            <div class="col-lg-6">
+              <div class="form-group">
+                <label for="">Name</label>
+                <input type="text" class="form-control" id="name"
+                  name="name" [(ngModel)]="profile.name"
+                  #name="ngModel" required>
+                <div [hidden]="name.valid || name.pristine" class="alert alert-danger">
+                  First name is required
+                </div>
+              </div>
+            </div>
+
+              <div class="form-group">
+                <label for="">Telephone</label>
+                <input type="text" class="form-control" id="phone" name="phone" [(ngModel)]="profile.phone">
+              </div>
+
+              <div class="form-group">
+                <label for="">Mobile phone</label>
+                <input type="text" class="form-control" id="mobile_phone" name="mobile_phone" [(ngModel)]="profile.mobile_phone">
+              </div>
+
+              <div class="form-group">
+                <label for="admin">Administrator (-1 yes, everything else - no)</label>
+                <input class="form-control" type="number" id="admin" name="admin" [(ngModel)]="item.profile.role">
+              </div>
+            </div>
+
+          <button type="submit" class="btn btn-primary" [disabled]="!createForm.form.valid">Save</button>
+        </form>
+
+      </div>
+      <!-- /.box-body -->
+    </div>
+    <!-- /.box -->
+  </div>
+  <!-- /.col -->
+</div>
+<!-- /.row -->

@@ -1,0 +1,48 @@
+<div class="admin-container hold-transition skin-blue sidebar-mini" [class.sidebar-open]="sidebarOpen" [class.sidebar-collapse]="sidebarOpen">
+  <div class="wrapper">
+    <header class="main-header">
+      <a routerLink="/admin" class="logo">
+        <span class="logo-mini"><b>M</b>MD</span>
+        <span class="logo-lg"><b>Mentor me</b> Dental</span>
+      </a>
+      <nav class="navbar navbar-static-top">
+        <a class="sidebar-toggle" (click)="sidebarOpen = !sidebarOpen">
+          <span class="sr-only">Toggle navigation</span>
+        </a>
+      </nav>
+    </header>
+    <aside  class="main-sidebar">
+      <section class="sidebar">
+        <ul class="sidebar-menu">
+          <li class="header">MAIN NAVIGATION</li>
+          <li routerLink="/admin/users" routerLinkActive="active"><a><i class="fa fa-users"></i> <span>Users</span></a></li>
+          <li routerLink="/admin/events" routerLinkActive="active"><a><i class="fa fa-calendar"></i> <span>Events</span></a></li>
+          <li routerLink="/admin/docs" routerLinkActive="active"><a><i class="fa fa-file"></i> <span>Docs</span></a></li>
+          <li routerLink="/admin/conversations" routerLinkActive="active"><a><i class="fa fa-comments"></i> <span>Conversations</span></a></li>
+          <li routerLink="/admin/posts" routerLinkActive="active"><a><i class="fa fa-newspaper-o"></i> <span>Posts</span></a></li>
+          <li routerLink="/admin/reviews" routerLinkActive="active"><a><i class="fa fa-star"></i> <span>Reviews</span></a></li>
+          <li routerLink="/admin/transactions" routerLinkActive="active"><a><i class="fa fa-credit-card"></i> <span>Transactions</span></a></li>
+          <li routerLink="/admin/purchases" routerLinkActive="active"><a><i class="fa fa-shopping-cart"></i> <span>Purchases</span></a></li>
+          <li routerLink="/admin/sessions" routerLinkActive="active"><a><i class="fa fa-graduation-cap"></i> <span>Mentor sessions</span></a></li>
+          <li routerLink="/admin/consultations" routerLinkActive="active"><a><i class="fa fa-address-card"></i> <span>Consultations</span></a></li>
+          <li class="header">ACTIONS</li>
+          <li routerLink="/"><a><i class="fa fa-home"></i> <span>Back to home</span></a></li>
+          <li><a (click)="globals.logout()"><i class="fa fa-sign-out text-red"></i> <span>Logout</span></a></li>
+        </ul>
+      </section>
+    </aside>
+
+    <div class="content-wrapper">
+      <!-- content -->
+      <section class="content">
+          <router-outlet></router-outlet>
+      </section>
+      <!-- /.content -->
+    </div>
+
+    <footer class="main-footer">
+      <strong>Copyright &copy; {{currentYear}} <a href="http://i-ways.net">i-ways sales solutions GmbH</a>.</strong> All rights
+      reserved.
+    </footer>
+  </div>
+</div>

@@ -1,17 +1,28 @@
 <md-toolbar color="primary">
-  <a routerLink="/" class="toolbar-title">Socially2</a>
+  <a routerLink="/" class="toolbar-title">Atiduodu.lt</a>
   <span class="fill-remaining-space"></span>
-  <div [hidden]="user">
-    <a md-button [routerLink]="['/login']" >Login</a>
-    <a md-button [routerLink]="['/signup']">Sign up</a>
+  <div *ngIf="!user">
+    <a md-button [routerLink]="['/login']" >Prisijungti</a>
+    <a md-button [routerLink]="['/signup']">Registruotis</a>
   </div>
-  <div [hidden]="!user">
-    <!--<span>{{ user | displayName }}</span>-->
-    <button md-button (click)="logout()">Logout</button>
-    <a md-button [routerLink]="['/item/new']">Naujas skelbimas</button>
+  <div *ngIf="user">
+    <a md-button [routerLink]="['/user', user._id]"><span>{{ user.profile.name}}</span></a>
+    <a md-button [routerLink]="['/messages']">
+      <span>Žinutės</span> 
+      <md-chip-list style="display:inline-block">
+        <md-chip color="accent">{{messages}}</md-chip>
+      </md-chip-list>
+    </a>
+    <a md-button [routerLink]="['/notifications']">
+      <span>Pranešimai</span> 
+      <md-chip-list style="display:inline-block">
+        <md-chip color="accent">{{notifications}}</md-chip>
+      </md-chip-list>
+    </a>
+    <a md-button (click)="logout()">Atsijungti</a>
+    <a md-button [routerLink]="['/item/new']">Naujas skelbimas</a>
   </div>
-  
-  Toolbar
+
 </md-toolbar>
 <div class="container">
 <router-outlet></router-outlet>

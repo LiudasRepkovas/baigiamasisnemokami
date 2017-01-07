@@ -1,4 +1,4 @@
-import { UserProfileComponent } from './user-profile.component';
+import { UserProfileComponent } from './profile.component';
 
 export const USER_DECLARATIONS = [
   UserProfileComponent,

@@ -14,6 +14,10 @@ Meteor.publish('item', function(itemId: string) {
   return Items.find({_id:itemId});
 });
 
+Meteor.publish('user_items', function(user: string) {
+  return Items.find({owner:user});
+});
+
 
 function queryBuilder(params){
   if(params != null){
@@ -21,6 +25,9 @@ function queryBuilder(params){
     if(params.category != ''){
       query["category"] = params.category;
     }
+    
+    
+    
     if(params.search != ''){
       query["name"] = {$regex: params.search, $options: "i"};
     }

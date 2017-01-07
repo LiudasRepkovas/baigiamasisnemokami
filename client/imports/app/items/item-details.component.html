@@ -1,6 +1,6 @@
 <md-card class="item" *ngIf="item">
     <h2>{{item.name}}</h2>
-    <a *ngIf="item.owner == user._id" [routerLink]="['/item/edit/', item._id]">Keisti</a>
+    <a *ngIf=" user && item.owner == user._id" [routerLink]="['/item/edit/', item._id]">Keisti</a>
 
     <div *ngIf="selectedImage" class="image-preview">
         <img [src]="selectedImage.url">
@@ -11,11 +11,36 @@
         </div>
     </div>
     <div class="info">
-        <span class="category">{{item.category.name}}</span>
-        <span class="date">{{item.timestamp | amTimeAgo}}</span>
+        <span class="category">Kategorija: {{item.category.name}}</span>
+        <span class="date">Sukurtas {{item.timestamp | amTimeAgo}}</span>
     </div>
-    <p>{{item.description}}</p>
-    
+    <div class="description">
+        <h3>Aprašymas:</h3>
+        <p>{{item.description}}</p>
+    </div>
+    <div *ngIf="owner && user" class="author">
+        <h3>Autorius:</h3>
+        <div>Vardas: {{owner.profile.name}}</div>
+        <div>Telefonas: {{owner.profile.phone}}</div>
+        <div>El.paštas: {{owner.emails[0].address}}</div>
+        <div>  
+            <a [routerLink]="['/messages', owner._id]">Rašyti asmeninę žinutę!</a>
+        </div>
+    </div>
+    <div class="map" *ngIf="item.location.lat">
+        <h3>Vieta:</h3>
+        <span>Adresas: {{item.address}}</span>
+        <sebm-google-map class="all-items-map" 
+            [latitude]="item.location.lat"
+            [longitude]="item.location.lng"
+            [zoom]="5">
+        <sebm-google-map-marker
+            [latitude]="item.location.lat"
+            [longitude]="item.location.lng">
+        </sebm-google-map-marker>
+        </sebm-google-map>
+    </div>
+
     <div class="comments">
         <h3>Komentarai:</h3>
         <comments-list [itemId]="item._id"></comments-list>

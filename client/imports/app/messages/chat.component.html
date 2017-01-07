@@ -1,0 +1,19 @@
+<md-card class="item" *ngIf="receiver">
+    <md-toolbar color="primary">
+        Susirašinėjimas su {{receiver.profile.name}}
+    </md-toolbar>
+    <div *ngFor="let message of messages | async">
+        {{message.body}}
+    </div>
+    <form *ngIf="user"  [formGroup]="addForm" (ngSubmit)="addMessage()">
+        <div style="display: table-row">
+        <div class="form-inputs">
+            <md-input-container>
+                <input dividerColor="accent" md-input formControlName="messageText" placeholder="Nauja žinutė"/>
+            </md-input-container>
+            <br/>
+            <button color="accent" md-raised-button type="submit">Siųsti</button>
+        </div>
+        </div>
+    </form>
+</md-card>

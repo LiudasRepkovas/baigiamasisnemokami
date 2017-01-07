@@ -1,0 +1,59 @@
+<div class="row">
+  <div class="col-xs-12">
+    <div class="box">
+      <div class="box-header">
+        <h3 class="box-title"></h3>
+      </div>
+      <!-- /.box-header -->
+      <div class="box-body">
+        <form *ngIf="item" (ngSubmit)="update()" #updateForm="ngForm" autocomplete="off">
+          <legend>Edit user - {{item._id}}</legend>
+
+          <div class="row">
+            <div class="col-lg-6">
+              <div class="form-group">
+                <label for="">First name</label>
+                <input type="text" class="form-control" id="name"
+                  name="first_name" [(ngModel)]="item.profile.name"
+                  #name="ngModel" required>
+                <div [hidden]="name.valid || name.pristine" class="alert alert-danger">
+                  First name is required
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="email">Email</label>
+                <input class="form-control" type="email" id="email" name="email" [(ngModel)]="item.emails[0].address" required>
+              </div>
+
+              <div class="form-group">
+                <label for="admin">Administrator (-1 yes, everything else - no)</label>
+                <input class="form-control" type="number" id="admin" name="admin" [(ngModel)]="item.profile.role">
+              </div>
+            </div>
+
+            <div class="col-lg-6">
+              <div class="form-group">
+                <label for="">Name</label>
+                <input type="text" class="form-control" id="name" name="name" [(ngModel)]="item.profile.name">
+              </div>
+
+
+              <div class="form-group">
+                <label for="">Telephone</label>
+                <input type="text" class="form-control" id="phone" name="phone" [(ngModel)]="item.profile.phone">
+              </div>
+            </div>
+          </div>
+
+          <button type="submit" class="btn btn-primary" [disabled]="!updateForm.form.valid">Update</button>
+        </form>
+
+      </div>
+      <!-- /.box-body -->
+    </div>
+    <!-- /.box -->
+  </div>
+  <!-- /.col -->
+</div>
+<!-- /.row -->

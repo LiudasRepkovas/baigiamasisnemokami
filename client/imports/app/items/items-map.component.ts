@@ -21,42 +21,12 @@ declare var google:any;
 @InjectUser("user")
 export class ItemsMapComponent{
 
-    location: any = {lat: 54.687157, lng: 25.279652};
-    loading: boolean;
-    itemsSub:any;
-    items: any;
-    categories: any;
-    categoriesSub:any; 
 
     constructor(private _loader: MapsAPILoader) {
-    this.loading = true;
         //TODO:padaryt kad lauktu kol suras useri bl
         //TODO:sutvarkyt kad gautu userio lokacija
-
-        let userLocation = UserLocation.get();
-        if(userLocation.latitude){
-            this.location = {
-                lat: userLocation.latitude,
-                lng: userLocation.longitude
-            };
-        }
     }
 
     ngOnInit(){
-
-        this.itemsSub = MeteorObservable.subscribe('items', {}, {}).subscribe(()=>{
-            let items = Items.find({}).fetch();
-            var itemsWithCategories = [];
-
-            _.each(items, (item)=>{
-                let category = _.filter(this.categories, {_id:item.category})[0];
-                if(!category){
-                    category = {name:"Be kategorijos"};
-                }
-                item.category = category;
-                itemsWithCategories.push(item);
-            })
-            this.items = itemsWithCategories;
-        });
     }
 }
