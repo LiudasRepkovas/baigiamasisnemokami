@@ -6,21 +6,43 @@
     <a md-button [routerLink]="['/signup']">Registruotis</a>
   </div>
   <div *ngIf="user">
-    <a md-button [routerLink]="['/user', user._id]"><span>{{ user.profile.name}}</span></a>
-    <a md-button [routerLink]="['/messages']">
+    <button md-icon-button class="mobile-menu" [mdMenuTriggerFor]="menu">
+      <md-icon>more_vert</md-icon>
+    </button>
+    <md-menu #menu="mdMenu">
+      <a md-menu-item [routerLink]="['/item/new']">Naujas skelbimas</a>
+      <a md-menu-item [routerLink]="['/messages']">
+        <span>Žinutės</span> 
+        <md-chip-list *ngIf="messages > 0" style="display:inline-block">
+          <md-chip color="accent">{{messages}}</md-chip>
+        </md-chip-list>
+      </a>
+      <a md-menu-item [routerLink]="['/notifications']">
+        <span>Pranešimai</span> 
+        <md-chip-list *ngIf="notifications > 0" style="display:inline-block">
+          <md-chip color="accent">{{notifications}}</md-chip>
+        </md-chip-list>
+      </a>
+      <a md-menu-item [routerLink]="['/user', user._id]"><strong>{{ user.profile.name}} Profilis</strong></a>
+      <a md-menu-item (click)="logout()">Atsijungti</a>
+    </md-menu>
+    <div class="normal-menu">
+      <a md-button [routerLink]="['/item/new']">Naujas skelbimas</a>
+      <a md-button [routerLink]="['/messages']">
       <span>Žinutės</span> 
-      <md-chip-list style="display:inline-block">
+      <md-chip-list *ngIf="messages > 0" style="display:inline-block">
         <md-chip color="accent">{{messages}}</md-chip>
       </md-chip-list>
-    </a>
-    <a md-button [routerLink]="['/notifications']">
+      </a>
+      <a md-button [routerLink]="['/notifications']">
       <span>Pranešimai</span> 
-      <md-chip-list style="display:inline-block">
+      <md-chip-list *ngIf="notifications > 0" style="display:inline-block">
         <md-chip color="accent">{{notifications}}</md-chip>
       </md-chip-list>
     </a>
+    <a md-button [routerLink]="['/user', user._id]"><strong>{{ user.profile.name}}</strong></a>
     <a md-button (click)="logout()">Atsijungti</a>
-    <a md-button [routerLink]="['/item/new']">Naujas skelbimas</a>
+    </div>
   </div>
 
 </md-toolbar>

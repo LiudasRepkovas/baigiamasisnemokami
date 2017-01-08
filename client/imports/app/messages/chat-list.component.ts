@@ -32,6 +32,7 @@ export class ChatListComponent implements OnInit, OnDestroy {
     users: any;
     user: Meteor.User;
     usersSub: any;
+    autorunSub: any;
 
     constructor(
     ) {}
@@ -40,32 +41,45 @@ export class ChatListComponent implements OnInit, OnDestroy {
         if (this.messagesSub) {
             this.messagesSub.unsubscribe();
         }
-
-        this.usersSub = MeteorObservable.subscribe('users').subscribe(()=>{
+        this.autorunSub = MeteorObservable.autorun().subscribe(()=>{
+            this.usersSub = MeteorObservable.subscribe('users').subscribe(()=>{
             this.users = Users.find({}).fetch();
             this.messagesSub = MeteorObservable.subscribe('user_messages').subscribe(()=>{
-            this.messages = Messages.find({}, {transform:(message)=>{
-                let from = _.filter(this.users, {_id:message.from})[0];
-                let to = _.filter(this.users, {_id:message.to})[0];
-                message.from = from;
-                message.to = to;
-                return message;
-            }}).fetch();
-            this.messageGroups = _.groupBy(this.messages, (message:any)=>{
-                if(message.from._id == Meteor.userId()){
-                    return message.to._id;
-                }
-                if(message.to._id == Meteor.userId()){
-                    return message.from._id;
-                }
+                this.messages = Messages.find({}, {sort:{timestamp: -1},transform:(message)=>{
+                    let from = _.filter(this.users, {_id:message.from})[0];
+                    let to = _.filter(this.users, {_id:message.to})[0];
+                    message.from = from;
+                    message.to = to;
+                    return message;
+                }}).fetch();
+                this.messageGroups = _.groupBy(this.messages, (message:any)=>{
+                    if(message.from._id == Meteor.userId()){
+                        return message.to._id;
+                    }else if(message.to._id == Meteor.userId()){
+                        return message.from._id;
+                    }
+                })
             })
-            console.log(this.messageGroups)
         })
         })
         
+        
     }
+
+getOtherPerson(message){
+    return message.to._id == Meteor.userId() ? message.from : message.to;
+}
+
+isUnread(groupKey){
+    let result = _.countBy(this.messageGroups[groupKey], (item)=>{
+        return (item.seen == false && item.to._id == Meteor.userId());
+    });
+    console.log(result);
+    return result['true'];
+}
 
     ngOnDestroy() {
         this.messagesSub.unsubscribe();
+        this.autorunSub.unsubscribe();
     }
 }

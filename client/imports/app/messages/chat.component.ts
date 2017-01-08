@@ -59,8 +59,13 @@ export class ChatComponent implements OnInit, OnDestroy {
                         this.messagesSub.unsubscribe();
                     }
                     this.receiver = Users.findOne({_id:userId});
+                    Meteor.call("markChatRead", this.receiver._id);
                     this.messagesSub = MeteorObservable.subscribe('user_chat', this.receiver._id).subscribe();
-                    this.messages = Messages.find({}).zone();
+                    this.messages = Messages.find({}, {sort: {timestamp: -1}, transform:(message)=>{
+                        message.from = message.from == Meteor.userId() ? Meteor.user() : this.receiver;
+                        message.to = message.to == Meteor.userId() ? Meteor.user() : this.receiver;
+                        return message;
+                    }}).zone();
                 });
         });
     }
@@ -73,6 +78,8 @@ export class ChatComponent implements OnInit, OnDestroy {
                 to: this.receiver._id
             }
             Meteor.call('insertMessage', newMessage);
+            this.addForm.reset();
+
         }
         
     }

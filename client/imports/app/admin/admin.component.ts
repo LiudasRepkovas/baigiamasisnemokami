@@ -25,7 +25,6 @@ export class AdminComponent extends MeteorComponent {
     super();
 
     this.autorun(() => {
-      alert('hi');
       if(!Meteor.userId() && this.router.url != '/login'){
         this.router.navigateByUrl('/login');
       }

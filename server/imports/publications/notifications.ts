@@ -7,7 +7,11 @@ import { Notifications } from '../../../both/collections/notifications.collectio
 Meteor.publish('user_notifications', function() {
     if(this.userId){
         let query = {owner:this.userId};
-        return Notifications.find();
+        return Notifications.find(query);
     }
 });
-Counts.publish('notifications_count', Notifications.collection.find({owner:this.userId, seen:false}));
+
+Meteor.publish('unread_notifications_count', function(){
+    Counts.publish(this, 'notifications_count', Notifications.collection.find({owner:this.userId, seen:false}));
+
+})

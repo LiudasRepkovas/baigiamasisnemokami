@@ -37,6 +37,7 @@ export class ItemFormComponent implements OnInit {
   item:any;
   itemSub:any;
   imagesSubs:any;
+  allImages: any;
 
   constructor(private formBuilder: FormBuilder,  private _loader: MapsAPILoader, private route: ActivatedRoute) {
 
@@ -55,6 +56,8 @@ export class ItemFormComponent implements OnInit {
   }
 
   ngOnInit(){
+    this.imagesSubs = MeteorObservable.subscribe('images').subscribe();
+
 
     this.paramsSub = this.route.params.map(params => params['itemId']).subscribe(itemId => {this.itemId = itemId;});
 
@@ -65,6 +68,7 @@ export class ItemFormComponent implements OnInit {
     if(this.itemId){
       this.itemSub = MeteorObservable.subscribe('item', this.itemId).subscribe(() => {
         this.item = Items.findOne({_id:this.itemId});
+        this.images = item.images;
         console.log(this.item);
         this.addForm.controls['name'].setValue(this.item.name);
         this.addForm.controls['description'].setValue(this.item.description);
@@ -84,7 +88,11 @@ export class ItemFormComponent implements OnInit {
     
 
   ngAfterViewInit(){
-    setTimeout(this.autocomplete(), 2000);
+    setTimeout(this.autocomplete(), 4000);
+  }
+
+  getImageUrl(id){
+    return Images.find({_id:id}).fetch()[0].url;
   }
 
   autocomplete() {
@@ -141,7 +149,16 @@ export class ItemFormComponent implements OnInit {
   }
 
   onImage(imageId: string) {
-    this.images.push(imageId);
+    setTimeout(this.images.push(imageId), 10);
+  }
+  
+  removeImage(index){
+    if(this.images.length > 1){
+      this.images.splice(index, 1);
+    } else {
+      this.images = [];
+    }
+    console.log(this.images);
   }
 
   resetImages(){

@@ -5,6 +5,7 @@ import { Subscription } from 'rxjs/Subscription';
 import { Meteor } from 'meteor/meteor';
 import { MeteorObservable } from 'meteor-rxjs';
 import { InjectUser } from "angular2-meteor-accounts-ui";
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import * as _ from 'lodash';
 
 import 'rxjs/add/operator/map';
@@ -28,6 +29,7 @@ import style from './profile.component.scss';
 @InjectUser('user')
 export class UserProfileComponent implements OnInit, OnDestroy {
 
+  addForm: FormGroup;
   itemId: string;
   paramsSub: Subscription;
   item: Item;
@@ -46,13 +48,24 @@ export class UserProfileComponent implements OnInit, OnDestroy {
   itemsSub:any;
 
   constructor(
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private formBuilder: FormBuilder
   ) {}
 
   ngOnInit() {
+
+    this.addForm = this.formBuilder.group({
+      name: ['', Validators.required],
+      phone: ['', Validators.required],
+      email: ['', Validators.required],
+    });
+
     this.categoriesSub = MeteorObservable.subscribe('categories').subscribe(()=>{
       this.categories = Categories.find({}).fetch();
     });
+
+    this.imagesSubs = MeteorObservable.subscribe('images').subscribe();
+
   
     this.paramsSub = this.route.params
       .map(params => params['userId'])
@@ -66,10 +79,14 @@ export class UserProfileComponent implements OnInit, OnDestroy {
         this.userSub = MeteorObservable.subscribe('user', this.userId).subscribe(() => {
             this.userDisplayed = Users.findOne({_id:this.userId});
 
-            console.log(this.userDisplayed);
+            if(this.userDisplayed._id == Meteor.userId()){
+              this.addForm.controls['name'].setValue(this.userDisplayed.profile.name);
+              this.addForm.controls['phone'].setValue(this.userDisplayed.profile.phone);
+              this.addForm.controls['email'].setValue(this.userDisplayed.emails[0].address);
+            }
 
             this.itemsSub = MeteorObservable.subscribe('user_items', this.userDisplayed._id).subscribe(()=>{
-                this.items = Items.find({}, {transform:(item)=>{
+                this.items = Items.find({}, {sort:{timestamp:-1}, transform:(item)=>{
                     let category = _.filter(this.categories, {_id:item.category})[0];
                     if(!category){
                         category = {name:"Be kategorijos"};
@@ -89,9 +106,12 @@ export class UserProfileComponent implements OnInit, OnDestroy {
     if(this.itemsSub){
       this.itemsSub.unsubscribe();
     }
+    if(this.imagesSubs){
+      this.imagesSubs.unsubscribe();
+    }
   }
 
   saveProfileData(){
-    Meteor.call('saveUserProfileData', this.userDisplayed.profile);
+    Meteor.call('saveUserProfileData', {name:this.addForm.value.name, phone:this.addForm.value.phone});
   }
 }

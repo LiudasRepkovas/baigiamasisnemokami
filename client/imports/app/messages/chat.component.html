@@ -2,18 +2,23 @@
     <md-toolbar color="primary">
         Susirašinėjimas su {{receiver.profile.name}}
     </md-toolbar>
-    <div *ngFor="let message of messages | async">
-        {{message.body}}
-    </div>
     <form *ngIf="user"  [formGroup]="addForm" (ngSubmit)="addMessage()">
         <div style="display: table-row">
         <div class="form-inputs">
-            <md-input-container>
+            <md-input-container style="display:inline-block">
                 <input dividerColor="accent" md-input formControlName="messageText" placeholder="Nauja žinutė"/>
             </md-input-container>
-            <br/>
-            <button color="accent" md-raised-button type="submit">Siųsti</button>
+            <button color="accent"  style="display:inline-block" md-raised-button type="submit">Siųsti</button>
         </div>
         </div>
     </form>
+    <div class="chat-wrapper">
+        <div style="overflow:auto; padding: 5px 0;" *ngFor="let message of messages | async">
+            <div style="display:inline-block; float:left;"><strong>{{message.from.profile.name}}({{message.from.emails[0].address}}):</strong></div>
+            <div style="display:inline-block; float:right;">{{message.timestamp | amTimeAgo}}</div>
+            <div class="body" style="clear:both">{{message.body}}</div>
+        </div>
+    </div>
+   
+    
 </md-card>

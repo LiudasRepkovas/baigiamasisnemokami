@@ -10,6 +10,7 @@ import { AppComponent } from "./app.component.web";
 import { routes } from './app.routes';
 import { ITEMS_DECLARATIONS } from './items';
 import { COMMENTS_DECLARATIONS } from './comments';
+import { NOTIFICATIONS_DECLARATIONS } from './notifications';
 import { USER_DECLARATIONS } from './user';
 import { AUTH_DECLARATIONS } from './auth';
 import { MESSAGES_DECLARATIONS } from './messages';
@@ -48,6 +49,7 @@ let moduleDefinition;
     ],
     declarations: [
       AppComponent,
+      ...NOTIFICATIONS_DECLARATIONS,
       ...AUTH_DECLARATIONS,
       ...ITEMS_DECLARATIONS,
       ...COMMENTS_DECLARATIONS,

@@ -2,7 +2,24 @@
     <md-toolbar color="primary">
         Susirašinėjimų sąrašas
     </md-toolbar>
-    <div *ngFor="let group of messageGroups | keys">
-        {{group.value[0].from}}
+    <div *ngIf="user">
+        <div style="margin: 10px auto; border-bottom: 1px solid grey; padding: 5px;" *ngFor="let group of messageGroups | keys">
+            <a [routerLink]="['/messages', group.key]">
+                {{getOtherPerson(group.value[0]).profile.name}} ({{getOtherPerson(group.value[0]).emails[0].address}})
+            </a>
+            <md-chip-list *ngIf="isUnread(group.key) > 0" style="display:inline-block">
+                <md-chip color="accent">{{isUnread(group.key)}}</md-chip>
+            </md-chip-list>
+            <div>Paskutinė žinutė:</div>
+            <div style="overflow:auto; padding: 5px 0;">
+                <div style="display:inline-block; float:left;"><strong>{{group.value[0].from.profile.name}}({{group.value[0].from.emails[0].address}}):</strong></div>
+                <div style="display:inline-block; float:right;">{{group.value[0].timestamp | amTimeAgo}}</div>
+                <div class="body" style="clear:both">{{group.value[0].body}}</div>
+            </div>
+                <!--{{group.value[0].from.profile.name}} ({{group.value[0].from.emails[0].address}})-->
+        </div>
+    </div>
+    <div *ngIf="!user">
+        <h2>Būkite geras ir prisijunkite.</h2>
     </div>
 </md-card>

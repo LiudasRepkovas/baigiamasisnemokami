@@ -2,11 +2,11 @@ import { Component } from '@angular/core';
 import {OnDestroy, OnInit} from "@angular/core";
 import {Observable, Subscription, Subject} from "rxjs";
 import {Item} from "../../../../both/models/item.model";
-import {MeteorObservable} from "meteor-rxjs";
 import {PaginationService} from "ng2-pagination";
 import {Items} from "../../../../both/collections/items.collection";
 import {Categories} from "../../../../both/collections/categories.collection";
 import {Counts} from "meteor/tmeasday:publish-counts";
+import {MeteorObservable} from "meteor-rxjs";
 import {InjectUser} from "angular2-meteor-accounts-ui";
 import {FormControl} from '@angular/forms';
 

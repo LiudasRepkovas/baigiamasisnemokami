@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import {Counts} from "meteor/tmeasday:publish-counts";
 import {MeteorObservable} from "meteor-rxjs";
 
@@ -23,17 +24,22 @@ export class AppComponent implements OnInit {
   autorunSub:any;
 
 
-  constructor() {
+  constructor(public router:Router) {
   }
 
   ngOnInit(){
-    this.autorunSub = MeteorObservable.autorun().subscribe(() => {
-      this.notifications = Counts.get('notifications_count');
-      this.messages = Counts.get('messages_count');
-    });
+    if(Meteor.userId()){
+      this.autorunSub = MeteorObservable.autorun().subscribe(() => {
+        this.messagesSub = MeteorObservable.subscribe('unread_messages_count').subscribe();
+        this.notificationsSub = MeteorObservable.subscribe('unread_notifications_count').subscribe();
+        this.notifications = Counts.get('notifications_count');
+        this.messages = Counts.get('messages_count');
+      });
+    }
   }
 
   logout() {
+    this.router.navigate(['/']);
     Meteor.logout();
   }
 }

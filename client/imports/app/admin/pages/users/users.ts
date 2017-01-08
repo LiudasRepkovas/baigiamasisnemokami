@@ -11,10 +11,6 @@ import template from './users.html';
 })
 export class AdminUsersComponent extends MeteorComponent {
   rows: any[] = [];
-  page: number = 1;
-  itemsPerPage: number = 10;
-  maxSize: number = 5;
-  numPages: number = 1;
   length: number = 0;
   data: any[] = [];
 
@@ -28,8 +24,6 @@ export class AdminUsersComponent extends MeteorComponent {
       if(Meteor.user()){
         this.data = this.formatData(Meteor.users.find({}, {sort: {createdAt: -1}}).fetch());
         this.length = this.data.length;
-        this.numPages = Math.ceil(this.length / this.itemsPerPage);
-        this.onChangeTable();
       }
     });
   }
@@ -44,16 +38,6 @@ export class AdminUsersComponent extends MeteorComponent {
         moment(item.createdAt).format('YYYY-MM-DD HH:mm')
       ];
     });
-  }
-
-  changePage(page: any, data: any[] = this.data) : any[] {
-    let start = (page.page - 1) * page.itemsPerPage;
-    let end = page.itemsPerPage > -1 ? (start + page.itemsPerPage) : data.length;
-    return data.slice(start, end);
-  }
-
-  onChangeTable(page: any = {page: this.page, itemsPerPage: this.itemsPerPage}) : any {
-    this.rows = page ? this.changePage(page) : this.data;
   }
 
   targetForRemoval(_id: string){

@@ -1,5 +1,7 @@
 <div>
-    <div class="comment" *ngFor="let comment of comments | async">
-    <span>{{comment.body}}</span>
+    <div style="border-bottom:1px solid black;" class="comment" *ngFor="let comment of comments | async">
+        <div style="display:inline-block; float:left;"><strong>{{comment.owner.profile.name}}({{comment.owner.emails[0].address}}):</strong></div>
+        <div style="display:inline-block; float:right;">{{comment.timestamp | amTimeAgo}}</div>
+        <div class="body" style="clear:both">{{comment.body}}</div>
     </div>
 </div>

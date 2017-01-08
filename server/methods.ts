@@ -44,13 +44,33 @@ Meteor.methods({
 
       Notifications.insert({
         owner: Items.find({_id:comment.item}).fetch()[0].owner,
-        text: commenter.profile.name,
-        url: Meteor.absoluteUrl()+'/items/id/'+comment.item,
+        text: commenter.profile.name+" pakomentavo tavo skelbimą!",
+        url: Meteor.absoluteUrl()+'items/id/'+comment.item,
         timestamp: _.now(),
         seen: false,
       })
     }
 
     
+  },
+  markChatRead(userId){
+    if(this.userId){
+      Messages.update({from:userId, to:this.userId}, {$set:{seen:true}}, {multi:true});
+    }
+  },
+  notifications_seen(){
+    if(this.userId){
+      console.log("semiu notifikeisinus")
+      console.log({owner:this.userId});
+      Notifications.update({owner:this.userId}, {$set:{seen:true}}, {multi:true});
+    }
+  },
+  saveUserProfileData(data){
+    if(this.userId){
+      Meteor.users.update(Meteor.userId(), {$set: {profile: {
+        name:data.name,
+        phone:data.phone
+      }}});
+    }
   }
 });

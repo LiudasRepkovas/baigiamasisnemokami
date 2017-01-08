@@ -72,12 +72,9 @@ export class ItemDetailsComponent implements OnInit, OnDestroy {
                 }
             });
 
-            console.log(this.item);
-
             if(this.item.owner){
               this.ownerSub = MeteorObservable.subscribe('user', this.item.owner).subscribe(()=>{
                 this.owner = Users.findOne({_id:this.item.owner});
-                console.log(this.owner);
               });
             } 
 
@@ -94,6 +91,8 @@ export class ItemDetailsComponent implements OnInit, OnDestroy {
   setPreview(image){
     this.selectedImage = image;
   }
+
+
 
   ngOnDestroy() {
     this.paramsSub.unsubscribe();

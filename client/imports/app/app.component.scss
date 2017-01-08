@@ -1,3 +1,6 @@
+$break-small: 700px;
+$break-large: 1100px;
+
 .toolbar-title {
   text-decoration: none;
   color: white;
@@ -14,4 +17,15 @@ md-toolbar {
 }
 items-list{
     width:100%;
+}
+.mobile-menu{
+  display:none;
+  @media screen and (max-width: $break-small) {
+    display:block;
+  }
+}
+.normal-menu{
+  @media screen and (max-width: $break-small) {
+    display:none;
+  }
 }

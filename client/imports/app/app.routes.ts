@@ -10,6 +10,7 @@ import { UserProfileComponent } from './user/profile.component';
 import { LoginComponent } from './auth/login.component.web';
 import { ChatListComponent } from './messages/chat-list.component';
 import { ChatComponent } from './messages/chat.component';
+import { NotificationsComponent } from './notifications/notifications.component';
 
 
 export const routes: Route[] = [
@@ -22,5 +23,6 @@ export const routes: Route[] = [
   { path: 'recover', component: RecoverComponent },
   { path: 'login', component: LoginComponent } ,
   { path: 'messages', component: ChatListComponent } ,
+  { path: 'notifications', component: NotificationsComponent } ,
   { path: 'messages/:userId', component: ChatComponent } ,
 ];

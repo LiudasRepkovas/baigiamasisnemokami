@@ -23,6 +23,12 @@
       </md-select>
     </div>
     <image-upload #upload (onFile)="onImage($event)"></image-upload>
+    <div *ngIf="images && images.length > 0" class="item-photos">
+        <div *ngFor="let image of images;let i = index" class="small-image-wrapper">
+            <img (click)="removeImage(i)" class="swiper-image" [src]="getImageUrl(image)">
+        </div>
+    </div>
+    
     <div style="text-align:center">
       <button md-button color="accent" md-raised-button type="submit">Kurti skelbimą!</button	>
     </div>
