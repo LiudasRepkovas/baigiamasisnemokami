@@ -11,8 +11,12 @@ module.exports = {
   },
 
   meteor: {
-    name: 'Atiduodu.lt',
+    name: 'Atiduodu',
     path: '../socially',
+    docker: {
+      //image: 'kadirahq/meteord', // (optional)
+      image: 'abernix/meteord:base', // use this image if using Meteor 1.4+
+    },
     servers: {
       one: {}
     },

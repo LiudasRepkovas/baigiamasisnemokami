@@ -23,7 +23,7 @@
         <div>Vardas: {{owner.profile.name}}</div>
         <div>Telefonas: {{owner.profile.phone}}</div>
         <div>El.paštas: {{owner.emails[0].address}}</div>
-        <div *ngIf="owner._id != Meteor.userId()">  
+        <div *ngIf="owner._id != userId">  
             <a [routerLink]="['/messages', owner._id]">Rašyti asmeninę žinutę!</a>
         </div>
     </div>

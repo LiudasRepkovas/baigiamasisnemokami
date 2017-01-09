@@ -37,7 +37,7 @@ Meteor.methods({
     if(this.userId){
 
       comment['owner'] = this.userId;
-      comment['timestamp'] = _.now;
+      comment['timestamp'] = _.now();
       Comments.insert(comment);
 
       let commenter = Meteor.users.findOne(comment.owner);

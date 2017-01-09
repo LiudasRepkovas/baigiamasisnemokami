@@ -20,7 +20,7 @@ import { FileDropModule } from "angular2-file-drop";
 import { GooglePlaceModule } from './downloaded/ng2-autocomplete/ng2-google-place.module';
 import { TimeAgoPipe } from './pipes/timeAgo.pipe';
 import { KeysPipe } from './pipes/keys.pipe';
-import { TruncatePipe } from 'angular2-truncate';
+import { TruncatePipe } from './pipes/truncate.pipe';
 import { Autosize } from './downloaded/autosize/autosize';  
 import {KSSwiperModule} from 'angular2-swiper';
 import { Ng2CloudinaryModule } from 'ng2-cloudinary';

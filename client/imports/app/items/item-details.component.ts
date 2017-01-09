@@ -47,6 +47,8 @@ export class ItemDetailsComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
+
+    this.userId = Meteor.userId();
     this.categoriesSub = MeteorObservable.subscribe('categories').subscribe(()=>{
       this.categories = Categories.find({}).fetch();
     });
