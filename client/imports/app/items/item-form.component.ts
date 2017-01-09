@@ -1,4 +1,4 @@
-import { Component, OnInit, ElementRef, ViewChildren, QueryList } from '@angular/core';
+import { Component, OnInit, OnDestroy, ElementRef, ViewChildren, QueryList } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Items } from '../../../../both/collections/items.collection';
 import { InjectUser } from "angular2-meteor-accounts-ui";
@@ -22,7 +22,7 @@ declare var google:any;
   styles: [ style ]
 })
 @InjectUser("user")
-export class ItemFormComponent implements OnInit {
+export class ItemFormComponent implements OnInit, OnDestroy {
   
   @ViewChildren('autocomplete') autocompleteInput : QueryList<ElementRef>;
   addForm: FormGroup;
@@ -145,6 +145,7 @@ export class ItemFormComponent implements OnInit {
       } else {
         Meteor.call('insertItem', item);
       }
+      this.addForm.reset();
     }
   }
 
@@ -163,6 +164,10 @@ export class ItemFormComponent implements OnInit {
 
   resetImages(){
     this.images = [];
+  }
+
+  ngOnDestroy(){
+    this.imagesSubs.unsubscribe();
   }
 
 }

@@ -1,6 +1,7 @@
 <md-card class="item" *ngIf="item">
     <h2>{{item.name}}</h2>
     <a *ngIf=" user && item.owner == user._id" [routerLink]="['/item/edit/', item._id]">Keisti</a>
+    <a *ngIf=" user && item.owner == user._id" (click)="deleteItem()">Trinti</a>
 
     <div *ngIf="selectedImage" class="image-preview">
         <img [src]="selectedImage.url">

@@ -73,4 +73,5 @@ export class ImageUploadComponent implements OnInit {
     this.filesArray = [];
     this.files.next(this.filesArray);
   }
+  
 }

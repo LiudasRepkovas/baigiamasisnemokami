@@ -1,7 +1,7 @@
 module.exports = {
   servers: {
     one: {
-      host: '139.59.131.21',
+      host: '46.101.185.249',
       username: 'root',
       pem: './key'
       //pem: 'C:/Users/Liudas/Desktop/baigiamasis/socially/key'
@@ -24,7 +24,7 @@ module.exports = {
       serverOnly: false,
     },
     env: {
-      ROOT_URL: 'http://139.59.131.21'
+      ROOT_URL: 'http://46.101.185.249'
     },
 
     //dockerImage: 'kadirahq/meteord'

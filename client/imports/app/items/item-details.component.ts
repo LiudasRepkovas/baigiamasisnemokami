@@ -5,6 +5,8 @@ import { Subscription } from 'rxjs/Subscription';
 import { Meteor } from 'meteor/meteor';
 import { MeteorObservable } from 'meteor-rxjs';
 import { InjectUser } from "angular2-meteor-accounts-ui";
+import {Router} from '@angular/router';
+
 import * as _ from 'lodash';
 
 import 'rxjs/add/operator/map';
@@ -43,7 +45,8 @@ export class ItemDetailsComponent implements OnInit, OnDestroy {
   ownerSub: any;
 
   constructor(
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    public router: Router
   ) {}
 
   ngOnInit() {
@@ -102,5 +105,10 @@ export class ItemDetailsComponent implements OnInit, OnDestroy {
     if(this.imagesSubs){
       this.imagesSubs.unsubscribe();
     }
+  }
+
+  deleteItem(){
+    this.router.navigate(['/']);
+    Meteor.call('deleteItem', this.itemId);
   }
 }

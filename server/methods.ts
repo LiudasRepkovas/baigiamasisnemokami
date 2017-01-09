@@ -50,8 +50,6 @@ Meteor.methods({
         seen: false,
       })
     }
-
-    
   },
   markChatRead(userId){
     if(this.userId){
@@ -71,6 +69,14 @@ Meteor.methods({
         name:data.name,
         phone:data.phone
       }}});
+    }
+  },
+  removeItem(itemId){
+    if(this.userId){
+      let item = Items.findOne({_id:itemId});
+      if(this.userId == item.owner){
+        Items.remove({_id:itemId});
+      }
     }
   }
 });
