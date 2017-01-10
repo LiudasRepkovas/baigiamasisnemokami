@@ -8,7 +8,7 @@
         <h2>El.paštas: {{user.emails[0].address}}</h2>
         <a md-button href="pm">Rašyti asmeninę žinutę</a> 
     </div>    
-    <form *ngIf="userDisplayed && user._id == userDisplayed._id" [formGroup]="addForm" (ngSubmit)="updateUser();" (keydown.enter)="$event.preventDefault()">
+    <form *ngIf="userDisplayed && user._id == userDisplayed._id" [formGroup]="addForm" (ngSubmit)="saveProfileData();" (keydown.enter)="$event.preventDefault()">
         <div class="formyte">
             <div>
                 <md-input-container>
@@ -55,7 +55,7 @@
                 </div>
             </md-card-subtitle>
             <md-card-content>	
-                {{item.description | truncate : 200 : '...'}}
+                {{item.description | truncate : 200 }}
             </md-card-content>
         </md-card>
     </div>

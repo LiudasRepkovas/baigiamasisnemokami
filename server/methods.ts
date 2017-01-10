@@ -4,6 +4,7 @@ import {Messages} from '../both/collections/messages.collection';
 import {Notifications} from '../both/collections/notifications.collection';
 import {Comments} from '../both/collections/comments.collection';
 import * as _ from 'lodash';
+import {isAdmin as isAdmin} from './imports/functions';
 
 Meteor.methods({
   getCategories() {
@@ -41,14 +42,15 @@ Meteor.methods({
       Comments.insert(comment);
 
       let commenter = Meteor.users.findOne(comment.owner);
-
-      Notifications.insert({
-        owner: Items.find({_id:comment.item}).fetch()[0].owner,
-        text: commenter.profile.name+" pakomentavo tavo skelbimą!",
-        url: Meteor.absoluteUrl()+'items/id/'+comment.item,
-        timestamp: _.now(),
-        seen: false,
-      })
+      if(commenter._id != this.userId){
+        Notifications.insert({
+          owner: Items.find({_id:comment.item}).fetch()[0].owner,
+          text: commenter.profile.name+" pakomentavo tavo skelbimą!",
+          url: Meteor.absoluteUrl()+'items/id/'+comment.item,
+          timestamp: _.now(),
+          seen: false,
+        })
+      } 
     }
   },
   markChatRead(userId){
@@ -74,9 +76,12 @@ Meteor.methods({
   removeItem(itemId){
     if(this.userId){
       let item = Items.findOne({_id:itemId});
-      if(this.userId == item.owner){
+      if(this.userId == item.owner || isAdmin(this.userId)){
         Items.remove({_id:itemId});
       }
     }
+  },
+  deleteComment(comment_id){
+    Comments.remove({_id:comment_id});
   }
 });

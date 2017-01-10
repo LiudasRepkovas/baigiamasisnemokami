@@ -9,4 +9,5 @@
             <p md-line> {{notification.timestamp | amTimeAgo}} </p>
         </md-list-item>
     </md-list>
+    <h2 *ngIf="notifications && (notifications | async)?.length==0">Pranešimų nėra</h2>
 </md-card>

@@ -7,6 +7,8 @@ import { MeteorObservable } from 'meteor-rxjs';
 import { InjectUser } from "angular2-meteor-accounts-ui";
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import * as _ from 'lodash';
+import {MdSnackBar} from '@angular/material';
+
 
 import 'rxjs/add/operator/map';
 
@@ -49,7 +51,8 @@ export class UserProfileComponent implements OnInit, OnDestroy {
 
   constructor(
     private route: ActivatedRoute,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    private snackBar:MdSnackBar
   ) {}
 
   ngOnInit() {
@@ -112,6 +115,21 @@ export class UserProfileComponent implements OnInit, OnDestroy {
   }
 
   saveProfileData(){
-    Meteor.call('saveUserProfileData', {name:this.addForm.value.name, phone:this.addForm.value.phone});
+    if(this.addForm.valid){
+       Meteor.call('saveUserProfileData', {name:this.addForm.value.name, phone:this.addForm.value.phone}, (error, result)=>{
+        if(!error){
+          this.openSnackBar("Duomenys sėkmingai atnaujinti!");
+        }
+    });
+    } else {
+      this.openSnackBar("Nepalikite tuščių laukų!");
+    }
+   
+  }
+
+  openSnackBar(message: string, action: string = null) {
+    this.snackBar.open(message, action, {
+      duration: 2000,
+    });
   }
 }

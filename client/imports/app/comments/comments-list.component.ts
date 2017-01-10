@@ -6,22 +6,27 @@ import {MeteorObservable} from "meteor-rxjs";
 import {Comments} from "../../../../both/collections/comments.collection";
 import {Users} from "../../../../both/collections/users.collection";
 import template from './comments-list.component.html';
+import {MdSnackBar} from '@angular/material';
+import { InjectUser } from "angular2-meteor-accounts-ui";
+
+
 
 
 @Component({
   selector: 'comments-list',
   template,
 })
-
+@InjectUser('user')
 export class CommentsListComponent implements OnInit, OnDestroy {
     
   @Input() itemId;
   comments: Observable<any[]>;
   commentsSub: Subscription;
   autorunSub: Subscription;
-  user: Meteor.User;
+  user:any = Meteor.user();
+  usersSub: any;
 
-  constructor() {
+  constructor(private snackBar:MdSnackBar) {
   }
 
   ngOnInit() {
@@ -36,8 +41,21 @@ export class CommentsListComponent implements OnInit, OnDestroy {
       });
       
   }
+
+  deleteComment(comment_id){
+    Meteor.call('deleteComment', comment_id, (error, response)=>{
+      if(!error){
+        this.openSnackBar('Komentaras sėkmingai ištrintas');
+      }
+    })
+  }
   
   ngOnDestroy() {
     this.commentsSub.unsubscribe();
+  }
+  openSnackBar(message: string, action: string = null) {
+    this.snackBar.open(message, action, {
+      duration: 2000,
+    });
   }
 }

@@ -9,6 +9,10 @@ import {Subject, Subscription, Observable} from "rxjs";
 import {MeteorObservable} from "meteor-rxjs";
 import {Categories} from "../../../../both/collections/categories.collection";
 import {Images} from "../../../../both/collections/images.collection";
+import {MdSnackBar} from '@angular/material';
+import {Router} from '@angular/router';
+
+
 
 import template from './item-form.component.html';
 import style from './item-form.component.scss';
@@ -39,7 +43,7 @@ export class ItemFormComponent implements OnInit, OnDestroy {
   imagesSubs:any;
   allImages: any;
 
-  constructor(private formBuilder: FormBuilder,  private _loader: MapsAPILoader, private route: ActivatedRoute) {
+  constructor(    public router: Router, private formBuilder: FormBuilder,  private _loader: MapsAPILoader, private route: ActivatedRoute, private snackBar:MdSnackBar) {
 
     this.location = {lat: 54.687157, lng: 25.279652};
     this.loading = false;
@@ -59,23 +63,31 @@ export class ItemFormComponent implements OnInit, OnDestroy {
     this.imagesSubs = MeteorObservable.subscribe('images').subscribe();
 
 
-    this.paramsSub = this.route.params.map(params => params['itemId']).subscribe(itemId => {this.itemId = itemId;});
+    this.paramsSub = this.route.params.map(params => params['itemId']).subscribe(itemId => {
+      this.itemId = itemId;
+      this.categoriesSub = MeteorObservable.subscribe('categories').subscribe(()=>{
+        this.categories = Categories.find({});
+        if(this.itemId){
+          this.itemSub = MeteorObservable.subscribe('item', this.itemId).subscribe(() => {
+            this.item = Items.findOne({_id:this.itemId});
+            this.images = this.item.images;
+            this.addForm.controls['name'].setValue(this.item.name);
+            this.addForm.controls['description'].setValue(this.item.description);
+            this.addForm.controls['location'].setValue(this.item.address);
+            this.addForm.controls['category'].setValue(this.item.category);
+            this.addForm.markAsDirty();
+            this.addForm.markAsTouched();
+          });
+        }    
+      });
+      
+  });
 
     this.categoriesSub = MeteorObservable.subscribe('categories').subscribe(()=>{
       this.categories = Categories.find({});
     });
 
-    if(this.itemId){
-      this.itemSub = MeteorObservable.subscribe('item', this.itemId).subscribe(() => {
-        this.item = Items.findOne({_id:this.itemId});
-        this.images = item.images;
-        console.log(this.item);
-        this.addForm.controls['name'].setValue(this.item.name);
-        this.addForm.controls['description'].setValue(this.item.description);
-        this.addForm.controls['location'].setValue(this.item.address);
-        this.addForm.controls['category'].setValue(this.item.category);
-      });
-    }
+    
     
     this.addForm = this.formBuilder.group({
       name: ['', Validators.required],
@@ -116,7 +128,7 @@ export class ItemFormComponent implements OnInit, OnDestroy {
 
   addItem(): void {
     if (!Meteor.userId()) {
-      alert('Please log in to add a item');
+      alert('Norėdami sukurti skelbimą privalote prisijungti!');
       return;
     }
 
@@ -141,11 +153,24 @@ export class ItemFormComponent implements OnInit, OnDestroy {
       }
 
       if(this.item){
-        Meteor.call('updateItem', item);
+        Meteor.call('updateItem', item, (error, response)=>{
+          if(!error){
+            this.openSnackBar("Skelbimas sekmingai išsaugotas");
+            this.router.navigate(['/item/id/'+this.itemId]);
+
+          }
+        });
       } else {
-        Meteor.call('insertItem', item);
-      }
-      this.addForm.reset();
+        Meteor.call('insertItem', item, (error, response)=>{
+          if(!error){
+            this.openSnackBar("Skelbimas sekmingai išsaugotas");
+            this.addForm.reset();
+            this.router.navigate(['/']);
+          }
+        });
+      }      
+    } else {
+      this.openSnackBar("Užpildykite visus formos laukus!");
     }
   }
 
@@ -163,11 +188,19 @@ export class ItemFormComponent implements OnInit, OnDestroy {
   }
 
   resetImages(){
-    this.images = [];
+    if(!this.itemId){
+      this.images = [];
+    }
   }
 
   ngOnDestroy(){
     this.imagesSubs.unsubscribe();
+  }
+
+  openSnackBar(message: string, action: string = null) {
+    this.snackBar.open(message, action, {
+      duration: 2000,
+    });
   }
 
 }

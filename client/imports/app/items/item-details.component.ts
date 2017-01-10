@@ -17,6 +17,7 @@ import { Item } from '../../../../both/models/item.model';
 import { Users } from '../../../../both/collections/users.collection';
 import { User } from '../../../../both/models/user.model';
 import { Categories } from '../../../../both/collections/categories.collection';
+import {MdSnackBar} from '@angular/material';
 
 import template from './item-details.component.html';
 import style from './item-details.component.scss';
@@ -43,10 +44,12 @@ export class ItemDetailsComponent implements OnInit, OnDestroy {
   categoriesSub:any;
   owner:any;
   ownerSub: any;
+  userId: any;
 
   constructor(
     private route: ActivatedRoute,
-    public router: Router
+    public router: Router,
+    private snackBar: MdSnackBar
   ) {}
 
   ngOnInit() {
@@ -108,7 +111,15 @@ export class ItemDetailsComponent implements OnInit, OnDestroy {
   }
 
   deleteItem(){
+    Meteor.call('removeItem', this.itemId, (error, response)=>{
+      this.openSnackBar('Skelbimas sėkmingai ištrintas');
+    });
     this.router.navigate(['/']);
-    Meteor.call('deleteItem', this.itemId);
   }
+
+    openSnackBar(message: string, action: string = null) {
+    this.snackBar.open(message, action, {
+      duration: 2000,
+    });
+    }
 }

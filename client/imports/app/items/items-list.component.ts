@@ -112,7 +112,7 @@ export class ItemsListComponent implements OnInit, OnDestroy {
       this.itemsSub = MeteorObservable.subscribe('items', query, options).subscribe(()=>{
             let items = Items.find(
               query, 
-              {
+              { sort:{timestamp:-1},
                 transform:(item)=>{
                 let category = _.filter(this.categories, {_id:item.category})[0];
                 if(!category){
