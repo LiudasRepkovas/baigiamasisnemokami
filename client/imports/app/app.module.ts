@@ -14,7 +14,7 @@ import { NOTIFICATIONS_DECLARATIONS } from './notifications';
 import { USER_DECLARATIONS } from './user';
 import { AUTH_DECLARATIONS } from './auth';
 import { MESSAGES_DECLARATIONS } from './messages';
-import { MaterialModule } from "@angular/material";
+import { MatSnackBarModule, MatInputModule, MatCardModule, MatToolbarModule, MatButtonModule } from "@angular/material";
 import { SHARED_DECLARATIONS} from "./shared";
 import { FileDropModule } from "angular2-file-drop";
 import { GooglePlaceModule } from './downloaded/ng2-autocomplete/ng2-google-place.module';
@@ -23,7 +23,7 @@ import { KeysPipe } from './pipes/keys.pipe';
 import { TruncatePipe } from './pipes/truncate.pipe';
 import { Autosize } from './downloaded/autosize/autosize';  
 import {KSSwiperModule} from 'angular2-swiper';
-import { Ng2CloudinaryModule } from 'ng2-cloudinary';
+// import { Ng2CloudinaryModule } from 'ng2-cloudinary';
 import {AdminModule} from './admin/admin.module'
 
 
@@ -32,13 +32,19 @@ let moduleDefinition;
   moduleDefinition = {
     imports: [
       AdminModule,
-      Ng2CloudinaryModule,
+      // Ng2CloudinaryModule,
       KSSwiperModule,
       GooglePlaceModule,
       Ng2PaginationModule,
       BrowserModule,
       RouterModule.forRoot(routes),
-      MaterialModule.forRoot(),
+      //material
+      MatSnackBarModule,
+      MatInputModule,
+      MatCardModule,
+      MatToolbarModule,
+      MatButtonModule,
+
       FormsModule,
       ReactiveFormsModule,
       FileDropModule,

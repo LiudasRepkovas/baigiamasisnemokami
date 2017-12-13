@@ -1,7 +1,7 @@
 <md-card class="item" *ngIf="item">
     <h2>{{item.name}}</h2>
     <div class="removeedit">
-        <a *ngIf=" user && item.owner == user._id || user.profile.admin" [routerLink]="['/item/edit/', item._id]">Keisti</a>
+        <a *ngIf=" user && item.owner == user._id || user?.profile.admin" [routerLink]="['/item/edit/', item._id]">Keisti</a>
         <a style="cursor:pointer; color:red; text-decoration:underline;" *ngIf=" user && item.owner == user._id || user.profile.admin" (click)="deleteItem()"> Trinti  </a>
     </div>
     
@@ -24,9 +24,9 @@
     </div>
     <div *ngIf="owner && user" class="author">
         <h3>Autorius:</h3>
-        <div>Vardas: {{owner.profile.name}}</div>
-        <div>Telefonas: {{owner.profile.phone}}</div>
-        <div>El.paštas: {{owner.emails[0].address}}</div>
+        <div>Vardas: {{owner?.profile?.name}}</div>
+        <div>Telefonas: {{owner?.profile?.phone}}</div>
+        <div>El.paštas: {{owner?.emails[0].address}}</div>
         <div *ngIf="owner._id != userId">  
             <a [routerLink]="['/messages', owner._id]">Rašyti asmeninę žinutę!</a>
         </div>

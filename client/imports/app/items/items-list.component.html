@@ -12,6 +12,10 @@
           *ngIf="item.location.lat"
           [latitude]="item.location.lat"
           [longitude]="item.location.lng">
+
+          <sebm-google-map-info-window [disableAutoPan]="true">
+            Hi, this is the content of the <strong>info window</strong>
+          </sebm-google-map-info-window>
           </sebm-google-map-marker>
         </div>
       </sebm-google-map>
@@ -51,18 +55,6 @@
         Skelbimai
       </md-toolbar>
       <pagination-controls directionLinks="true" class="pagination" (pageChange)="onPageChanged($event)"></pagination-controls>
-
-      <!--<div class="item-row" *ngFor="let item of items|async">
-        <div class="image">
-          <img md-list-avatar *ngIf="item.images && item.images.length > 0" [src]="item | displayMainImage">
-          <img md-list-avatar *ngIf="!item.images || item.images.length <= 0" src="img/noimage2.png">
-        </div>
-        <div class="item-info">
-          <h3>{{item.name}}</h3>
-          <p>Kategorija: {{item.category.name}}, Sukurta {{item.timestamp | amTimeAgo}}</p>
-          <p>{{item.description | truncate : 200 : '...'}}</p>
-        </div>
-      </div>-->
       <md-card *ngFor="let item of items|async" class="item-card">
         <md-card-title>
           <a [routerLink]="['/item/id', item._id]">{{item.name}}</a>

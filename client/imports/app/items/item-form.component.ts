@@ -12,10 +12,10 @@ import {Images} from "../../../../both/collections/images.collection";
 import {MdSnackBar} from '@angular/material';
 import {Router} from '@angular/router';
 
-
-
 import template from './item-form.component.html';
 import style from './item-form.component.scss';
+
+let UserLocation
 
 
 declare var google:any;

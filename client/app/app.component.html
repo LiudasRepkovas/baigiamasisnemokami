@@ -1,0 +1,51 @@
+<mat-toolbar color="primary">
+  <a routerLink="/" class="toolbar-title">Atiduodu.lt</a>
+  <span class="fill-remaining-space"></span>
+  <div *ngIf="!user">
+    <a matButton [routerLink]="['/login']" >Prisijungti</a>
+    <a matButton [routerLink]="['/signup']">Registruotis</a>
+  </div>
+  <!--<div *ngIf="user">
+    <button md-icon-button class="mobile-menu" [mdMenuTriggerFor]="menu">
+      <md-icon>more_vert</md-icon>
+    </button>
+    <md-menu #menu="mdMenu">
+      <a md-menu-item [routerLink]="['/item/new']">Naujas skelbimas</a>
+      <a md-menu-item [routerLink]="['/messages']">
+        <span>Žinutės</span> 
+        <md-chip-list *ngIf="messages > 0" style="display:inline-block">
+          <md-chip color="accent">{{messages}}</md-chip>
+        </md-chip-list>
+      </a>
+      <a md-menu-item [routerLink]="['/notifications']">
+        <span>Pranešimai</span> 
+        <md-chip-list *ngIf="notifications > 0" style="display:inline-block">
+          <md-chip color="accent">{{notifications}}</md-chip>
+        </md-chip-list>
+      </a>
+      <a md-menu-item [routerLink]="['/user', user._id]"><strong>{{ user.profile.name}} Profilis</strong></a>
+      <a md-menu-item (click)="logout()">Atsijungti</a>
+    </md-menu>
+    <div class="normal-menu">
+      <a md-button [routerLink]="['/item/new']">Naujas skelbimas</a>
+      <a md-button [routerLink]="['/messages']">
+      <span>Žinutės</span> 
+      <md-chip-list *ngIf="messages > 0" style="display:inline-block">
+        <md-chip color="accent">{{messages}}</md-chip>
+      </md-chip-list>
+      </a>
+      <a md-button [routerLink]="['/notifications']">
+      <span>Pranešimai</span> 
+      <md-chip-list *ngIf="notifications > 0" style="display:inline-block">
+        <md-chip color="accent">{{notifications}}</md-chip>
+      </md-chip-list>
+    </a>
+    <a md-button [routerLink]="['/user', user._id]"><strong>{{ user.profile.name}}</strong></a>
+    <a md-button (click)="logout()">Atsijungti</a>
+    </div>
+  </div>-->
+
+</mat-toolbar>
+<div class="container">
+<router-outlet></router-outlet>
+</div>

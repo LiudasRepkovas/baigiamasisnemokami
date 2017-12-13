@@ -36,7 +36,7 @@
   <div *ngIf="!user">
     Norėdami sukurti skelbimą privalote prisijungti!
   </div>
-  <div *ngIf="item && item.owner != user._id && !user.profile.admin">
+  <div *ngIf="item && item?.owner != user?._id && !user?.profile?.admin">
     Negalite keisti ne savo skelbimo!
   </div>
   <md-spinner *ngIf="loading" class="preloader-wrapper big active"></md-spinner>

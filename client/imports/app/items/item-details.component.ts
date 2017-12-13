@@ -103,8 +103,12 @@ export class ItemDetailsComponent implements OnInit, OnDestroy {
 
 
   ngOnDestroy() {
-    this.paramsSub.unsubscribe();
-    this.itemSub.unsubscribe();
+    if(this.paramsSub){
+      this.paramsSub.unsubscribe();
+    }
+    if(this.itemSub){
+      this.itemSub.unsubscribe();
+    }
     if(this.imagesSubs){
       this.imagesSubs.unsubscribe();
     }

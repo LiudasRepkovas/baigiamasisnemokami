@@ -1,0 +1,39 @@
+<div class="md-content" layout="row" layout-align="center start" layout-fill layout-margin>
+  <div layout="column" flex flex-sm="50" flex-md="40" flex-lg="40" flex-gt-lg="40" class="md-whiteframe-z2" layout-fill>
+    <mat-toolbar class="md-primary" color="primary">
+      Prisijungti
+    </mat-toolbar>
+
+    <div layout="column" layout-margin layout-padding>
+      <div layout="row" layout-margin>
+        <p class="md-body-2"> Prisijunkite su el.paštu</p>
+      </div>
+
+      <form [formGroup]="loginForm" #f="ngForm" (ngSubmit)="login()" layout="column" layout-fill layout-padding layout-margin>
+        <mat-form-field class="full_length">
+          <input matInput formControlName="email" type="email" placeholder="El.paštas"></input>
+        </mat-form-field> 
+        <mat-form-field class="full_length">
+          <input matInput formControlName="password" type="password" placeholder="Slaptažodis"></input>
+        </mat-form-field>
+        <div layout="row" layout-align="space-between center">
+          <!--<a md-button [routerLink]="['/recover']">Pamiršote slaptažodį?</a>-->
+          <button mat-raised-button color="primary" class="full_length" type="submit" aria-label="login">Prisijungti</button>
+        </div>
+      </form>
+
+      <div [hidden]="error == ''">
+        <mat-toolbar class="md-warn" layout="row" layout-fill layout-padding layout-margin>
+          <p class="md-body-1">{{ error }}</p>
+        </mat-toolbar>
+      </div>
+
+      <mat-divider></mat-divider>
+
+      <div layout="row" layout-align="center">
+        <a mat-button [routerLink]="['/signup']">Neturite paskyros?</a>
+        <a mat-button [routerLink]="['/recover']">Pamiršote slaptažodį?</a>
+      </div>
+    </div>
+  </div>
+</div>
