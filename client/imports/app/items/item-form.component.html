@@ -1,26 +1,27 @@
-<md-card class="form-center">
+<mat-card class="form-center">
   <h2 *ngIf="!item">Naujas skelbimas</h2>
   <h2 *ngIf="item">Atnaujinti skelbimą</h2>
   <form *ngIf="!loading && user" [formGroup]="addForm" (ngSubmit)="addItem(); upload.reset(); resetImages();" (keydown.enter)="$event.preventDefault()">
     <div>
-      <md-input-container>
-        <input md-input dividerColor="accent" formControlName="name" placeholder="Pavadinimas">
-      </md-input-container>
+        <mat-form-field>   
+        <input matInput dividerColor="accent" formControlName="name" placeholder="Pavadinimas">
+      </mat-form-field>
     </div>
     <div>
-      <md-input-container>
-        <textarea autosize md-input  rows="2" dividerColor="accent" formControlName="description" placeholder="Aprašymas">
-      </md-input-container>
+        <mat-form-field>
+            
+        <textarea autosize mat-input  rows="2" dividerColor="accent" formControlName="description" placeholder="Aprašymas">
+        </mat-form-field>
     </div>
     <div>
-      <md-input-container floatingPlaceholder="false">
-        <input md-input type="text" formControlName="location" id="autocomplete" #autocomplete placeholder="Adresas"/> 
-      </md-input-container>
+        <mat-form-field floatingPlaceholder="false">
+        <input matInput type="text" formControlName="location" id="autocomplete" #autocomplete placeholder="Adresas"/> 
+      </mat-input-container>
     </div>
     <div>
-      <md-select floatingPlaceholder="false" formControlName="category" placeholder="Kategorija">
-        <md-option *ngFor="let cat of categories|async" [value]="cat._id">{{cat.name}}</md-option>
-      </md-select>
+      <mat-select floatingPlaceholder="false" formControlName="category" placeholder="Kategorija">
+        <mat-option *ngFor="let cat of categories|async" [value]="cat._id">{{cat.name}}</mat-option>
+      </mat-select>
     </div>
     <image-upload #upload (onFile)="onImage($event)"></image-upload>
     <div *ngIf="images && images.length > 0" class="item-photos">
@@ -30,7 +31,7 @@
     </div>
     
     <div style="text-align:center">
-      <button md-button color="accent" md-raised-button type="submit">Išsaugoti skelbimą!</button	>
+      <button mat-button color="accent"-raised-button type="submit">Išsaugoti skelbimą!</button	>
     </div>
   </form>
   <div *ngIf="!user">
@@ -39,5 +40,5 @@
   <div *ngIf="item && item?.owner != user?._id && !user?.profile?.admin">
     Negalite keisti ne savo skelbimo!
   </div>
-  <md-spinner *ngIf="loading" class="preloader-wrapper big active"></md-spinner>
-</md-card>
+  <mat-spinner *ngIf="loading" class="preloader-wrapper big active"></mat-spinner>
+</mat-card>

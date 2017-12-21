@@ -1,8 +1,8 @@
 <div class="md-content" layout="row" layout-align="center start" layout-fill layout-margin>
   <div layout="column" flex flex-md="50" flex-lg="50" flex-gt-lg="33" class="md-whiteframe-z2" layout-fill>
-    <md-toolbar class="md-primary" color="primary">
+    <mat-toolbar class="md-primary" color="primary">
       Prisijungti
-    </md-toolbar>
+    </mat-toolbar>
 
     <div layout="column" layout-margin layout-padding>
       <div layout="row" layout-margin>
@@ -11,26 +11,29 @@
 
       <form [formGroup]="loginForm" #f="ngForm" (ngSubmit)="login()"
             layout="column" layout-fill layout-padding layout-margin>
-
-        <md-input formControlName="email" type="email" placeholder="El.paštas"></md-input>
-        <md-input formControlName="password" type="password" placeholder="Slaptažodis"></md-input>
-
+        <mat-form-field>
+          <input matInput  formControlName="email" type="email" placeholder="El.paštas"></mat-input>
+          
+        </mat-form-field>
+        <mat-form-field>
+        <input matInput  formControlName="password" type="password" placeholder="Slaptažodis"></mat-input>
+        </mat-form-field>
         <div layout="row" layout-align="space-between center">
-          <!--<a md-button [routerLink]="['/recover']">Pamiršote slaptažodį?</a>-->
-          <button md-raised-button class="md-primary" type="submit" aria-label="login">Prisijungti</button>
+          <!--<a mat-button [routerLink]="['/recover']">Pamiršote slaptažodį?</a>-->
+          <button mat-raised-button class="md-primary" type="submit" aria-label="login">Prisijungti</button>
         </div>
       </form>
 
       <div [hidden]="error == ''">
-        <md-toolbar class="md-warn" layout="row" layout-fill layout-padding layout-margin>
+        <mat-toolbar class="md-warn" layout="row" layout-fill layout-padding layout-margin>
           <p class="md-body-1">{{ error }}</p>
-        </md-toolbar>
+        </mat-toolbar>
       </div>
 
-      <md-divider></md-divider>
+      <mat-divider></mat-divider>
 
       <div layout="row" layout-align="center">
-        <a md-button [routerLink]="['/signup']">Neturite paskyros?</a>
+        <a mat-button [routerLink]="['/signup']">Neturite paskyros?</a>
       </div>
     </div>
   </div>

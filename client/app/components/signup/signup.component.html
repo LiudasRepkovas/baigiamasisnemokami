@@ -1,17 +1,24 @@
 <div class="md-content" layout="row" layout-align="center start" layout-fill layout-margin>
   <div layout="column" flex flex-md="50" flex-lg="50" flex-gt-lg="33" class="md-whiteframe-z2" layout-fill>
-    <!--<md-toolbar class="md-primary" color="primary">
+    <!--<mat-toolbar class="md-primary" color="primary">
       Registruotis
     </md-toolbar>-->
 
     <div layout="column" layout-fill layout-margin layout-padding>
       <form [formGroup]="signupForm" #f="ngForm" (ngSubmit)="signup()"
             layout="column" layout-fill layout-padding layout-margin>
-
-        <md-input formControlName="email" type="email" placeholder="El.Paštas"></md-input>
-        <md-input formControlName="password" type="password" placeholder="Slaptažodis"></md-input>
-        <md-input formControlName="name" type="text" placeholder="Vardas"></md-input>
-        <md-input formControlName="phone" type="phone" placeholder="Telefonas"></md-input>
+            <mat-form-field class="full_length">
+              <input formControlName="email" type="email" placeholder="El.Paštas"/>                
+            </mat-form-field>
+            <mat-form-field class="full_length">
+                <input formControlName="password" type="password" placeholder="Slaptažodis"/>                
+            </mat-form-field>
+            <mat-form-field class="full_length">
+              <input formControlName="name" type="text" placeholder="Vardas"/>
+            </mat-form-field>   
+            <mat-form-field class="full_length">
+              <input formControlName="phone" type="phone" placeholder="Telefonas"/>                
+            </mat-form-field>       
 
         <!--<div layout="row" layout-align="space-between center">
           <button matButton class="md-primary" type="submit" style="margin: auto" aria-label="login">Registruotis</button>
@@ -24,7 +31,7 @@
         </mat-toolbar>
       </div>
 
-      <md-divider></md-divider>
+      <mat-divider></mat-divider>
 
       <div layout="row" layout-align="center">
         <a matButton [routerLink]="['/login']">Jau narys?</a>

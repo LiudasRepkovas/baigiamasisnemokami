@@ -9,7 +9,7 @@ import {Subject, Subscription, Observable} from "rxjs";
 import {MeteorObservable} from "meteor-rxjs";
 import {Categories} from "../../../../both/collections/categories.collection";
 import {Images} from "../../../../both/collections/images.collection";
-import {MdSnackBar} from '@angular/material';
+import {MatSnackBar} from '@angular/material';
 import {Router} from '@angular/router';
 
 import template from './item-form.component.html';
@@ -43,7 +43,7 @@ export class ItemFormComponent implements OnInit, OnDestroy {
   imagesSubs:any;
   allImages: any;
 
-  constructor(    public router: Router, private formBuilder: FormBuilder,  private _loader: MapsAPILoader, private route: ActivatedRoute, private snackBar:MdSnackBar) {
+  constructor(    public router: Router, private formBuilder: FormBuilder,  private _loader: MapsAPILoader, private route: ActivatedRoute, private snackBar:MatSnackBar) {
 
     this.location = {lat: 54.687157, lng: 25.279652};
     this.loading = false;

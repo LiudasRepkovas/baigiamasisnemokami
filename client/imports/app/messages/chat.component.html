@@ -1,14 +1,14 @@
-<md-card class="item" *ngIf="receiver">
-    <md-toolbar color="primary">
+<mat-card class="item" *ngIf="receiver">
+    <mat-toolbar color="primary">
         Susirašinėjimas su {{receiver.profile.name}}
-    </md-toolbar>
+    </mat-toolbar>
     <form *ngIf="user"  [formGroup]="addForm" (ngSubmit)="addMessage()">
         <div style="display: table-row">
         <div class="form-inputs">
-            <md-input-container style="display:inline-block">
-                <input dividerColor="accent" md-input formControlName="messageText" placeholder="Nauja žinutė"/>
-            </md-input-container>
-            <button color="accent"  style="display:inline-block" md-raised-button type="submit">Siųsti</button>
+                <mat-form-field style="display:inline-block">
+                <input dividerColor="accent"-input formControlName="messageText" placeholder="Nauja žinutė"/>
+                </mat-form-field>
+            <button color="accent"  style="display:inline-block"-raised-button type="submit">Siųsti</button>
         </div>
         </div>
     </form>
@@ -21,4 +21,4 @@
     </div>
    
     
-</md-card>
+</mat-card>

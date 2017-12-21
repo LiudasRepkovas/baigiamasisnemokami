@@ -1,62 +1,65 @@
-<md-card class="user-info">
-    <md-toolbar class="md-primary" color="primary">
+<mat-card class="user-info">
+    <mat-toolbar class="md-primary" color="primary">
         Naudotojo profilis
-    </md-toolbar>
+    </mat-toolbar>
     <div *ngIf="userDisplayed && user._id != userDisplayed._id" >
         <h2>Vardas: {{user.profile.name}}</h2>
         <h2>Telefono numeris: {{user.profile.phone}}</h2>
         <h2>El.paštas: {{user.emails[0].address}}</h2>
-        <a md-button href="pm">Rašyti asmeninę žinutę</a> 
+        <a mat-button href="pm">Rašyti asmeninę žinutę</a> 
     </div>    
     <form *ngIf="userDisplayed && user._id == userDisplayed._id" [formGroup]="addForm" (ngSubmit)="saveProfileData();" (keydown.enter)="$event.preventDefault()">
         <div class="formyte">
             <div>
-                <md-input-container>
-                    <input md-input dividerColor="accent" formControlName="name" placeholder="Vardas">
-                </md-input-container>
+                    <mat-form-field>
+                            
+                    <input matInput dividerColor="accent" formControlName="name" placeholder="Vardas">
+                    </mat-form-field>
             </div>
             <div>
-                <md-input-container>
-                    <input md-input dividerColor="accent" formControlName="phone" placeholder="Telefonas">
-                </md-input-container>
+                    <mat-form-field>
+                            
+                    <input dividerColor="accent" formControlName="phone" placeholder="Telefonas">
+                </mat-form-field>
             </div>
             <div>
-                <md-input-container>
-                    <input md-input dividerColor="accent" formControlName="email" disabled="true" placeholder="El.paštas">
-                </md-input-container>
+                    <mat-form-field>
+                            
+                    <input dividerColor="accent" formControlName="email" disabled="true" placeholder="El.paštas">
+                    </mat-form-field>
             </div>
             
             
             
         </div>
         <div style="text-align:left">
-            <button md-button color="accent" md-raised-button type="submit">Išsaugoti!</button	>
+            <button mat-button color="accent"-raised-button type="submit">Išsaugoti!</button	>
         </div>
     </form>
-</md-card>
+</mat-card>
 
-<md-card class="user-items">
-    <md-toolbar  class="md-primary"  color="primary">
+<mat-card class="user-items">
+    <mat-toolbar  class="md-primary"  color="primary">
         Naudotojo skelbimai
-    </md-toolbar>
+    </mat-toolbar>
     <div class="cards-wrapper">
-        <md-card *ngFor="let item of items|async" class="item-card">
-            <md-card-title>
+        <mat-card *ngFor="let item of items|async" class="item-card">
+            <mat-card-title>
                 <a [routerLink]="['/item/id', item._id]">{{item.name}}</a>
-            </md-card-title>
+            </mat-card-title>
             <div class="image-wrapper">
                 <img *ngIf="item.images && item.images.length > 0" [src]="item | displayMainImage">
                 <img *ngIf="!item.images || item.images.length <= 0" src="img/noimage2.png">
             </div>
-            <md-card-subtitle>
+            <mat-card-subtitle>
                 <div class="info">
                     <span class="category">{{item.category.name}}</span>
                     <span class="date">{{item.timestamp | amTimeAgo}}</span>
                 </div>
-            </md-card-subtitle>
-            <md-card-content>	
+            </mat-card-subtitle>
+            <mat-card-content>	
                 {{item.description | truncate : 200 }}
-            </md-card-content>
-        </md-card>
+            </mat-card-content>
+        </mat-card>
     </div>
-</md-card>
+</mat-card>

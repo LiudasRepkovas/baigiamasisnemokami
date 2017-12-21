@@ -1,15 +1,15 @@
-<md-card class="chat-list">
-    <md-toolbar color="primary">
+<mat-card class="chat-list">
+    <mat-toolbar color="primary">
         Susirašinėjimų sąrašas
-    </md-toolbar>
+    </mat-toolbar>
     <div *ngIf="user">
         <div style="margin: 10px auto; border-bottom: 1px solid grey; padding: 5px;" *ngFor="let group of messageGroups | keys">
             <a [routerLink]="['/messages', group.key]">
                 {{getOtherPerson(group.value[0]).profile.name}} ({{getOtherPerson(group.value[0]).emails[0].address}})
             </a>
-            <md-chip-list *ngIf="isUnread(group.key) > 0" style="display:inline-block">
-                <md-chip color="accent">{{isUnread(group.key)}}</md-chip>
-            </md-chip-list>
+            <mat-chip-list *ngIf="isUnread(group.key) > 0" style="display:inline-block">
+                <mat-chip color="accent">{{isUnread(group.key)}}</mat-chip>
+            </mat-chip-list>
             <div>Paskutinė žinutė:</div>
             <div style="overflow:auto; padding: 5px 0;">
                 <div style="display:inline-block; float:left;"><strong>{{group.value[0].from.profile.name}}({{group.value[0].from.emails[0].address}}):</strong></div>
@@ -23,4 +23,4 @@
     <div *ngIf="!user">
         <h2>Būkite geras ir prisijunkite.</h2>
     </div>
-</md-card>
+</mat-card>

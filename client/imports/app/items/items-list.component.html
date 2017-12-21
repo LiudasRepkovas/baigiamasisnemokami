@@ -1,8 +1,8 @@
 <div class="item-list">
-    <md-card class="map">
-      <md-toolbar class="md-primary" color="primary">
+    <mat-card class="map">
+      <mat-toolbar class="md-primary" color="primary">
         Skelbimų žemėlapis
-      </md-toolbar>
+      </mat-toolbar>
       <sebm-google-map class="all-items-map" 
         [latitude]="55.1684581"
         [longitude]="22.7739322"
@@ -19,63 +19,64 @@
           </sebm-google-map-marker>
         </div>
       </sebm-google-map>
-    </md-card>
-    <md-card class="filter-card">
-      <md-toolbar class="md-primary" color="primary">
+    </mat-card>
+    <mat-card class="filter-card">
+      <mat-toolbar class="md-primary" color="primary">
         Filtruoti skelbimus
-      </md-toolbar>
+      </mat-toolbar>
       <form>       
-        <md-grid-list cols="3" rowHeight="65px">
-          <md-grid-tile>
-            <md-select  [formControl]="categoryInput" (change)="onCategoryChanged($event.target.value)" placeholder="Kategorija">
-              <md-option value="">
+        <mat-grid-list cols="3" rowHeight="65px">
+          <mat-grid-tile>
+            <mat-select  [formControl]="categoryInput" (change)="onCategoryChanged($event.target.value)" placeholder="Kategorija">
+              <mat-option value="">
                 Visos kategorijos
-              </md-option>
-              <md-option  *ngFor="let category of categories" [value]="category._id">
+              </mat-option>
+              <mat-option  *ngFor="let category of categories" [value]="category._id">
                 {{category.name}}
-              </md-option>
-            </md-select>
-          </md-grid-tile>
-          <md-grid-tile>
-            <md-select [formControl]="orderInput" placeholder="Rikiavimas">
-              <md-option value=-1>Naujausi viršuje</md-option>
-              <md-option value=1>Seniausi viršuje</md-option>
-            </md-select>
-          </md-grid-tile>
-          <md-grid-tile>
-            <md-input-container>
-              <input md-input placeholder="Paieškos tekstas" type="text" [formControl]="searchInput">
-            </md-input-container>
-          </md-grid-tile>
-        </md-grid-list>
+              </mat-option>
+            </mat-select>
+          </mat-grid-tile>
+          <mat-grid-tile>
+            <mat-select [formControl]="orderInput" placeholder="Rikiavimas">
+              <mat-option value=-1>Naujausi viršuje</mat-option>
+              <mat-option value=1>Seniausi viršuje</mat-option>
+            </mat-select>
+          </mat-grid-tile>
+          <mat-grid-tile>
+              <mat-form-field>
+                  
+              <input matInput placeholder="Paieškos tekstas" type="text" [formControl]="searchInput"/>
+            </mat-form-field>
+          </mat-grid-tile>
+        </mat-grid-list>
       </form>
-    </md-card>
-    <md-card class="cards-wrapper" *ngIf="!loading">
-      <md-toolbar class="md-primary" color="primary">
+    </mat-card>
+    <mat-card class="cards-wrapper" *ngIf="!loading">
+      <mat-toolbar class="md-primary" color="primary">
         Skelbimai
-      </md-toolbar>
+      </mat-toolbar>
       <pagination-controls directionLinks="true" class="pagination" (pageChange)="onPageChanged($event)"></pagination-controls>
-      <md-card *ngFor="let item of items|async" class="item-card">
-        <md-card-title>
+      <mat-card *ngFor="let item of items|async" class="item-card">
+        <mat-card-title>
           <a [routerLink]="['/item/id', item._id]">{{item.name}}</a>
-        </md-card-title>
+        </mat-card-title>
         <div class="image-wrapper">
           <img *ngIf="item.images && item.images.length > 0" [src]="item | displayMainImage">
           <img *ngIf="!item.images || item.images.length <= 0" src="img/noimage2.png">
         </div>
-        <md-card-subtitle>
+        <mat-card-subtitle>
           <div class="info">
             <span class="category">{{item.category.name}}</span>
             <span class="date">{{item.timestamp | amTimeAgo}}</span>
           </div>
-      	</md-card-subtitle>
-        <md-card-content>	
+      	</mat-card-subtitle>
+        <mat-card-content>	
           {{item.description}}
-        </md-card-content>
-      </md-card>
+        </mat-card-content>
+      </mat-card>
         <pagination-controls class="pagination" (pageChange)="onPageChanged($event)"></pagination-controls>
-        <md-spinner *ngIf="loading"></md-spinner>
-    </md-card>
+        <mat-spinner *ngIf="loading"></mat-spinner>
+    </mat-card>
     
 
      

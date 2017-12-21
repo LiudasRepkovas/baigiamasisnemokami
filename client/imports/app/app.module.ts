@@ -7,14 +7,14 @@ import { provideLazyMapsAPILoaderConfig } from 'angular2-google-maps/core';
 import { AgmCoreModule } from 'angular2-google-maps/core';
 
 import { AppComponent } from "./app.component.web";
-import { routes } from './app.routes';
+import { AppRoutingModule } from './routing.module';
 import { ITEMS_DECLARATIONS } from './items';
 import { COMMENTS_DECLARATIONS } from './comments';
 import { NOTIFICATIONS_DECLARATIONS } from './notifications';
 import { USER_DECLARATIONS } from './user';
 import { AUTH_DECLARATIONS } from './auth';
 import { MESSAGES_DECLARATIONS } from './messages';
-import { MatSnackBarModule, MatInputModule, MatCardModule, MatToolbarModule, MatButtonModule } from "@angular/material";
+import { MatSnackBarModule, MatInputModule,MatSelectModule, MatCardModule, MatToolbarModule, MatButtonModule, MatChipsModule, MatMenuModule } from "@angular/material";
 import { SHARED_DECLARATIONS} from "./shared";
 import { FileDropModule } from "angular2-file-drop";
 import { GooglePlaceModule } from './downloaded/ng2-autocomplete/ng2-google-place.module';
@@ -37,13 +37,16 @@ let moduleDefinition;
       GooglePlaceModule,
       Ng2PaginationModule,
       BrowserModule,
-      RouterModule.forRoot(routes),
+      AppRoutingModule,
       //material
       MatSnackBarModule,
       MatInputModule,
       MatCardModule,
       MatToolbarModule,
       MatButtonModule,
+      MatChipsModule,
+      MatMenuModule,
+      MatSelectModule,
 
       FormsModule,
       ReactiveFormsModule,

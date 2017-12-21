@@ -1,13 +1,13 @@
-<md-card class="notifications">
-    <md-toolbar  class="md-primary"  color="primary">
+<mat-card class="notifications">
+    <mat-toolbar  class="md-primary"  color="primary">
         Pranešimai
-    </md-toolbar>
-    <md-list>
-        <md-list-item *ngFor="let notification of notifications|async">
-            <md-icon md-list-avatar>feedback</md-icon>
-            <h4 md-line><a [routerLink]="['/', notification.url]">{{notification.text}}</a></h4>
-            <p md-line> {{notification.timestamp | amTimeAgo}} </p>
-        </md-list-item>
-    </md-list>
+    </mat-toolbar>
+    <mat-list>
+        <mat-list-item *ngFor="let notification of notifications|async">
+            <mat-icon mat-list-avatar>feedback</mat-icon>
+            <h4 mat-line><a [routerLink]="['/', notification.url]">{{notification.text}}</a></h4>
+            <p mat-line> {{notification.timestamp | amTimeAgo}} </p>
+        </mat-list-item>
+    </mat-list>
     <h2 *ngIf="notifications && (notifications | async)?.length==0">Pranešimų nėra</h2>
-</md-card>
+</mat-card>

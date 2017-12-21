@@ -1,4 +1,4 @@
-<md-card class="item" *ngIf="item">
+<mat-card class="item" *ngIf="item">
     <h2>{{item.name}}</h2>
     <div class="removeedit">
         <a *ngIf=" user && item.owner == user._id || user?.profile.admin" [routerLink]="['/item/edit/', item._id]">Keisti</a>
@@ -50,4 +50,4 @@
         <comments-list [itemId]="item._id"></comments-list>
         <comments-form [itemId]="item._id"></comments-form>
     </div>
-</md-card>
+</mat-card>

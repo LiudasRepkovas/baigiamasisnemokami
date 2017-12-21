@@ -17,7 +17,7 @@ import { Item } from '../../../../both/models/item.model';
 import { Users } from '../../../../both/collections/users.collection';
 import { User } from '../../../../both/models/user.model';
 import { Categories } from '../../../../both/collections/categories.collection';
-import {MdSnackBar} from '@angular/material';
+import {MatSnackBar} from '@angular/material';
 
 import template from './item-details.component.html';
 import style from './item-details.component.scss';
@@ -49,7 +49,7 @@ export class ItemDetailsComponent implements OnInit, OnDestroy {
   constructor(
     private route: ActivatedRoute,
     public router: Router,
-    private snackBar: MdSnackBar
+    private snackBar: MatSnackBar
   ) {}
 
   ngOnInit() {

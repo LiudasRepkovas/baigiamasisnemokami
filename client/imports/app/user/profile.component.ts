@@ -7,7 +7,7 @@ import { MeteorObservable } from 'meteor-rxjs';
 import { InjectUser } from "angular2-meteor-accounts-ui";
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import * as _ from 'lodash';
-import {MdSnackBar} from '@angular/material';
+import {MatSnackBar} from '@angular/material';
 
 
 import 'rxjs/add/operator/map';
@@ -52,7 +52,7 @@ export class UserProfileComponent implements OnInit, OnDestroy {
   constructor(
     private route: ActivatedRoute,
     private formBuilder: FormBuilder,
-    private snackBar:MdSnackBar
+    private snackBar:MatSnackBar
   ) {}
 
   ngOnInit() {

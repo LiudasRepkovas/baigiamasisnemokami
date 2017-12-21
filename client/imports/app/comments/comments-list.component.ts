@@ -6,7 +6,7 @@ import {MeteorObservable} from "meteor-rxjs";
 import {Comments} from "../../../../both/collections/comments.collection";
 import {Users} from "../../../../both/collections/users.collection";
 import template from './comments-list.component.html';
-import {MdSnackBar} from '@angular/material';
+import {MatSnackBar} from '@angular/material';
 import { InjectUser } from "angular2-meteor-accounts-ui";
 
 
@@ -26,7 +26,7 @@ export class CommentsListComponent implements OnInit, OnDestroy {
   user:any = Meteor.user();
   usersSub: any;
 
-  constructor(private snackBar:MdSnackBar) {
+  constructor(private snackBar:MatSnackBar) {
   }
 
   ngOnInit() {

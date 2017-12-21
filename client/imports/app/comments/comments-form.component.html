@@ -1,9 +1,12 @@
         <form *ngIf="user" [formGroup]="addForm" (ngSubmit)="addComment()">
           <div style="display: table-row">
             <div class="form-inputs">
-              <md-input dividerColor="accent" formControlName="body" placeholder="Komentaras"></md-input>
+                <mat-form-field>
+                    
+              <input matInput  dividerColor="accent" formControlName="body" placeholder="Komentaras"/>
+              </mat-form-field> 
               <br/>
-              <button color="accent" md-raised-button type="submit">Išsaugoti komentarą</button>
+              <button color="accent"-raised-button type="submit">Išsaugoti komentarą</button>
             </div>
           </div>
         </form>

@@ -1,43 +1,43 @@
 <div class="party-details-container" *ngIf="party">
   <div class="row">
     <div class="party-details">
-      <md-card>
+      <mat-card>
         <h2>{{ party.name }}</h2>
         <form layout="column" (submit)="saveParty()">
           <label>Party Name: </label>
-          <md-input [disabled]="!isOwner" [(ngModel)]="party.name" name="name"></md-input>
+          <input matInput  [disabled]="!isOwner" [(ngModel)]="party.name" name="name"/>
           <br />
           <label>Party Description: </label>
-          <md-input [disabled]="!isOwner" [(ngModel)]="party.description" name="description"></md-input>
+          <input matInput  [disabled]="!isOwner" [(ngModel)]="party.description" name="description"/>
           <br />
           <label>Location name: </label>
-          <md-input [disabled]="!isOwner" [(ngModel)]="party.location.name" name="location"></md-input>
+          <input matInput  [disabled]="!isOwner" [(ngModel)]="party.location.name" name="location"/>
           <br />
-          <md-checkbox [disabled]="!isOwner" [(checked)]="party.public" name="public" aria-label="Public">
+          <mat-checkbox [disabled]="!isOwner" [(checked)]="party.public" name="public" aria-label="Public">
             Public party?
-          </md-checkbox>
+          </mat-checkbox>
 
           <div layout="row" layout-align="left">
-            <button [disabled]="!isOwner" type="submit" md-raised-button color="accent">Save</button>
-            <a [routerLink]="['/']" md-raised-button class="md-raised">Back</a>
+            <button [disabled]="!isOwner" type="submit"-raised-button color="accent">Save</button>
+            <a [routerLink]="['/']"-raised-button class="md-raised">Back</a>
           </div>
         </form>
-      </md-card>
+      </mat-card>
     </div>
     <div class="party-invites">
-      <md-card>
+      <mat-card>
         <h2>Invitations</h2>
         <span [hidden]="!party.public">Public party, no need for invitations!</span>
-        <md-list>
-          <md-list-item *ngFor="let user of users | async">
+        <mat-list>
+          <mat-list-item *ngFor="let user of users | async">
             <div>{{ user | displayName }}</div>
-            <button (click)="invite(user)" md-raised-button>Invite</button>
-          </md-list-item>
-        </md-list>
-      </md-card>
+            <button (click)="invite(user)"-raised-button>Invite</button>
+          </mat-list-item>
+        </mat-list>
+      </mat-card>
     </div>
     <div class="party-map">
-      <md-card>
+      <mat-card>
         <h2>Party location</h2>
         <sebm-google-map
           [latitude]="lat || centerLat"
@@ -50,7 +50,7 @@
             [longitude]="lng">
           </sebm-google-map-marker>
         </sebm-google-map>
-      </md-card>
+      </mat-card>
     </div>
   </div>
 </div>
