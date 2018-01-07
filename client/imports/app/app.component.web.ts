@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ApplicationRef, NgZone } from '@angular/core';
 import { Router } from '@angular/router';
 import {Counts} from "meteor/tmeasday:publish-counts";
 import {MeteorObservable} from "meteor-rxjs";
@@ -24,7 +24,7 @@ export class AppComponent implements OnInit {
   autorunSub:any;
 
 
-  constructor(public router:Router) {
+  constructor(public router:Router, public ref: ApplicationRef, public zone: NgZone) {
   }
 
   ngOnInit(){
@@ -39,7 +39,11 @@ export class AppComponent implements OnInit {
   }
 
   logout() {
-    this.router.navigate(['/']);
-    Meteor.logout();
+    // this.router.navigate(['/']);
+    Meteor.logout(()=>{
+      this.zone.run(()=>{
+        this.ref.tick();
+      })
+    })
   }
 }

@@ -33,3 +33,7 @@ matb33:collection-hooks
 dynamic-import
 angular2-compilers
 barbatus:angular2-polyfills
+accounts-facebook
+service-configuration
+accounts-ui
+percolate:synced-cron

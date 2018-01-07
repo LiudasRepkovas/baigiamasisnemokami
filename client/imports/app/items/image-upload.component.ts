@@ -63,6 +63,26 @@ export class ImageUploadComponent implements OnInit {
       });
   }
 
+  onFileInputChange(event){
+
+    this.uploading = true;
+    console.log(event);
+    if(event){
+      for(let file of event){
+        upload(file)
+        .then((result) => {
+          this.uploading = false;
+          this.addFile(result);
+        })
+        .catch((error) => {
+          this.uploading = false;
+          console.log(`Something went wrong!`, error);
+        });
+      }
+    }
+   
+  }
+
   addFile(file) {
     this.filesArray.push(file._id);
     this.files.next(this.filesArray);

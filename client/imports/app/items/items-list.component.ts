@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ElementRef, ViewChildren, QueryList, ChangeDetectorRef  } from '@angular/core';
 import {OnDestroy, OnInit} from "@angular/core";
 import {Observable, Subscription, Subject} from "rxjs";
 import {Item} from "../../../../both/models/item.model";
@@ -9,11 +9,15 @@ import {Counts} from "meteor/tmeasday:publish-counts";
 import {MeteorObservable} from "meteor-rxjs";
 import {InjectUser} from "angular2-meteor-accounts-ui";
 import {FormControl} from '@angular/forms';
+import { MapsAPILoader } from 'angular2-google-maps/core';
+
 
 import * as _ from 'lodash';
 import 'rxjs/add/operator/combineLatest';
 import template from './items-list.component.html';
 import style from './items-list.component.scss';
+
+declare var google:any;
 
 interface Pagination {
   limit: number;
@@ -35,6 +39,9 @@ interface Options extends Pagination {
 
 export class ItemsListComponent implements OnInit, OnDestroy {
 
+  @ViewChildren('autocomplete') autocompleteInput : QueryList<ElementRef>;
+  
+
   items: any;
   itemsSub: Subscription;
   locations: any;
@@ -47,19 +54,29 @@ export class ItemsListComponent implements OnInit, OnDestroy {
   loading: boolean = true;
 
   searchInput = new FormControl();
-  categoryInput = new FormControl();
-  orderInput = new FormControl();
+  categoryInput = new FormControl('');
+  orderInput = new FormControl(-1);
+  imagesInput = new FormControl(false);
+  cityInput = new FormControl('');
+
+
 
   pageSize: Subject<number> = new Subject<number>();
   curPage: Subject<number> = new Subject<number>();
   order: Subject<number> = new Subject<number>();
   searchQuery: Subject<string> = new Subject<string>();
   category: Subject<string> = new Subject<string>();
+  address: Subject<string> = new Subject<string>();
+  searchRadius: Subject<number> = new Subject<number>();
+  images: Subject<boolean> = new Subject<boolean>();
+
+  location: Subject<any> = new Subject<any>();;
+  
 
 
   imagesSubs: Subscription;
 
-  constructor(private paginationService: PaginationService) {
+  constructor(private paginationService: PaginationService, private _loader: MapsAPILoader, private ref: ChangeDetectorRef) {
   }
 
   ngOnInit() {
@@ -67,6 +84,18 @@ export class ItemsListComponent implements OnInit, OnDestroy {
     //   this.categories = result;
     //   this.loading = false;
     // });
+
+    //TODO:padaryt kad lauktu kol suras useri bl
+    //TODO:sutvarkyt kad gautu userio lokacija
+
+    let interval = setInterval(()=>{
+      if(this.autocompleteInput.toArray() && this.autocompleteInput.toArray()[0] && this.autocompleteInput.toArray()[0].nativeElement){
+        console.log(this.autocompleteInput);
+        console.log('atsirado');
+        clearInterval(interval);
+        this.autocomplete();
+      }
+    }, 100)
     
     
 
@@ -82,22 +111,51 @@ export class ItemsListComponent implements OnInit, OnDestroy {
       this.order,
       this.searchQuery,
       this.category,
-    ).subscribe(([pageSize, curPage, order, searchQuery, category]) => {
+      this.location,
+      this.searchRadius,
+      this.images
+    ).subscribe(([pageSize, curPage, order, searchQuery, category, location, radius, images]) => {
       var options: Options = {
         limit: pageSize as number,
         skip: (curPage as number - 1) * (pageSize as number),
         sort: {timestamp: order as number}
       };
 
+
       // console.log("options");
       // console.log(options);
 
-      let query = {};
+      let query = {
+        active: true,
+        deleted: {$ne: true}
+      };
+
+      
+      // Items.find({location:{$near:[54.6730103, 25.2737462], $maxDistance: 10 / 111.12 }}).fetch()
+      if(location){
+        query['location'] = {
+          $near:{
+            $geometry: {
+              type: 'Point',
+              coordinates: [ location.lng, location.lat ]
+            },
+            $maxDistance: radius *  1000
+          }
+        }
+    }
+
       if(searchQuery as string != ''){
-        query['name'] = {$regex: searchQuery as string, $options: "i"};
+        query['$or'] = [
+          {name:{$regex: searchQuery as string, $options: "i"}},
+          {description: {$regex: searchQuery as string, $options: "i"}}
+        ];
+      }
+
+      if(images){
+        query['images'] = { $exists: true, $not: {$size: 0} };
       }
         
-      if(category as string != ''){
+      if(category && category as string != ''){
         query['category'] = category as string;
       }
 
@@ -112,9 +170,9 @@ export class ItemsListComponent implements OnInit, OnDestroy {
       this.itemsSub = MeteorObservable.subscribe('items', query, options).subscribe(()=>{
             let items = Items.find(
               query, 
-              { sort:{timestamp:-1},
+              { sort:{timestamp:order as number},
                 transform:(item)=>{
-                let category = _.filter(this.categories, {_id:item.category})[0];
+                let category: any = _.filter(this.categories, {_id:item.category})[0];
                 if(!category){
                   category = {name:"Be kategorijos"};
                 }
@@ -126,6 +184,8 @@ export class ItemsListComponent implements OnInit, OnDestroy {
             console.log(items.fetch());
             this.items = items;
       });
+      this.ref.markForCheck()
+      this.ref.detectChanges()
 
     });
 
@@ -141,6 +201,10 @@ export class ItemsListComponent implements OnInit, OnDestroy {
     this.order.next(-1);
     this.category.next('');
     this.searchQuery.next('');
+    this.location.next(null);    
+    this.address.next(null);
+    this.searchRadius.next(30)
+    this.images.next(false);
     this.loading = false;
 
     this.searchInput.valueChanges
@@ -150,6 +214,11 @@ export class ItemsListComponent implements OnInit, OnDestroy {
 
     this.categoryInput.valueChanges.subscribe(data => {
       this.category.next(data);
+    })
+
+    this.imagesInput.valueChanges.subscribe(data => {
+      this.images.next(data)
+
     })
     
     this.orderInput.valueChanges.subscribe(data => {
@@ -180,6 +249,37 @@ export class ItemsListComponent implements OnInit, OnDestroy {
     this.autorunSub.unsubscribe();
     this.imagesSubs.unsubscribe();
   }
+
+  sliderChanged(event){
+    this.searchRadius.next(event.value);
+  }
+
+  autocomplete() {
+    this._loader.load().then(() => {
+        console.log(this.autocompleteInput.toArray());
+        let autocomplete = new google.maps.places.Autocomplete(this.autocompleteInput.toArray()[0].nativeElement , {});
+        google.maps.event.addListener(autocomplete, 'place_changed', () => {
+            let place = autocomplete.getPlace();
+            if(place.geometry){
+              this.location.next({
+                lat:place.geometry.location.lat(),
+                lng:place.geometry.location.lng()
+              })
+            } else {
+              this.location.next(null);
+            }
+            this.cityInput.setValue(place.formatted_address);
+            console.log(place);
+
+        });
+    });
+}
+
+cityInputChange(value){
+  if(!value || value == ''){
+    this.location.next(null);
+  }
+}
 
   log(stuff){
     console.log(stuff);

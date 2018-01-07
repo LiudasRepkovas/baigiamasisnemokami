@@ -74,7 +74,7 @@ export class UserProfileComponent implements OnInit, OnDestroy {
       .map(params => params['userId'])
       .subscribe(userId => {
         this.userId = userId;
-        
+        console.log('userio kuri rodom id: ', this.userId);
         if (this.userSub) {
           this.userSub.unsubscribe();
         }
@@ -89,7 +89,7 @@ export class UserProfileComponent implements OnInit, OnDestroy {
             }
 
             this.itemsSub = MeteorObservable.subscribe('user_items', this.userDisplayed._id).subscribe(()=>{
-                this.items = Items.find({}, {sort:{timestamp:-1}, transform:(item)=>{
+                this.items = Items.find({owner: this.userId}, {sort:{timestamp:-1}, transform:(item)=>{
                     let category = _.filter(this.categories, {_id:item.category})[0];
                     if(!category){
                         category = {name:"Be kategorijos"};

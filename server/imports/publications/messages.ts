@@ -15,8 +15,8 @@ Meteor.publish('user_messages', function() {
 
 Meteor.publish('user_chat', function(userId) {
     let query = {$or:[{from:this.userId, to:userId} , {to:this.userId, from:userId}]};
-    console.log(query);
-    console.log(Messages.find(query).fetch());
+    // console.log(query);
+    // console.log(Messages.find(query).fetch());
     return Messages.find({$or:[{from:this.userId, to:userId}, {to:this.userId, from:userId}]}, {sort: {timestamp: -1}});
 
 });

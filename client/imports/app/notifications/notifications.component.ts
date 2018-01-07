@@ -14,6 +14,7 @@ import { Notifications } from '../../../../both/collections/notifications.collec
 
 import template from './notifications.component.html';
 import style from './notifications.component.scss';
+import { UrlSegment } from '@angular/router/src/url_tree';
 
 @Component({
   selector: 'notifications-list',
@@ -39,7 +40,10 @@ export class NotificationsComponent implements OnInit, OnDestroy {
   ngOnInit() {
 
       this.notificationsSub = MeteorObservable.subscribe('user_notifications').subscribe();
-      this.notifications = Notifications.find({}).zone();
+      this.notifications = Notifications.find({}, {sort:{timestamp: -1}}).map((notification: any) => {
+        notification.url = encodeURIComponent(notification.url);
+        return notification;
+      }).zone();
       Meteor.call('notifications_seen');
   }
 

@@ -1,11 +1,9 @@
 <mat-toolbar color="primary">
-  <a routerLink="/" class="toolbar-title">Atiduodu.lt  BYBI</a>
+  <a routerLink="/" class="toolbar-title">Atiduodu.lt</a>
   <span class="fill-remaining-space"></span>
   <div *ngIf="!user">    <a mat-button [routerLink]="['/signup']">Registruotis</a>
     
     <a mat-button [routerLink]="['/login']" >Prisijungti</a>
-    <a mat-button [routerLink]="['/signup']">Registruotis</a>
-    <a mat-button routerLink="/register">Registruotis 2</a>
     
   </div>
   <div *ngIf="user">

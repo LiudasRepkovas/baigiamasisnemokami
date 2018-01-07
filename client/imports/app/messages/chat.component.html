@@ -6,15 +6,19 @@
         <div style="display: table-row">
         <div class="form-inputs">
                 <mat-form-field style="display:inline-block">
-                <input dividerColor="accent"-input formControlName="messageText" placeholder="Nauja žinutė"/>
+                <input dividerColor="accent" matInput formControlName="messageText" placeholder="Nauja žinutė"/>
                 </mat-form-field>
-            <button color="accent"  style="display:inline-block"-raised-button type="submit">Siųsti</button>
+            <button color="accent"  style="display:inline-block" mat-raised-button type="submit">Siųsti</button>
         </div>
         </div>
     </form>
     <div class="chat-wrapper">
         <div style="overflow:auto; padding: 5px 0;" *ngFor="let message of messages | async">
-            <div style="display:inline-block; float:left;"><strong>{{message.from.profile.name}}({{message.from.emails[0].address}}):</strong></div>
+            <div style="display:inline-block; float:left;">
+                <strong *ngIf="message.from._id != user._id" style="cursor: pointer" [routerLink]="['/user', message.from._id]">{{message.from.profile.name}}({{message.from.emails[0].address}}):</strong>
+                <strong *ngIf="message.from._id == user._id" >{{message.from.profile.name}}({{message.from.emails[0].address}}):</strong>
+                
+            </div>
             <div style="display:inline-block; float:right;">{{message.timestamp | amTimeAgo}}</div>
             <div class="body" style="clear:both">{{message.body}}</div>
         </div>

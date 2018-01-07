@@ -14,26 +14,29 @@ import { ChatListComponent } from './messages/chat-list.component';
 import { ChatComponent } from './messages/chat.component';
 import { NotificationsComponent } from './notifications/notifications.component';
 
+import {LoggedInGuard} from './services/loggedIn.guard.service';
+
 
 export let routes: Routes = [
   { path: 'signup', component: SignupComponent },  
   { path: 'register', component: SignupComponent },  
   { path: '', component: ItemsListComponent },
   { path: 'item/id/:itemId', component: ItemDetailsComponent },
-  { path: 'item/edit/:itemId', component: ItemFormComponent },
-  { path: 'item/new', component: ItemFormComponent },
-  { path: 'user/:userId', component: UserProfileComponent },
+  { path: 'item/edit/:itemId', component: ItemFormComponent, canActivate: [LoggedInGuard] },
+  { path: 'item/new', component: ItemFormComponent, canActivate: [LoggedInGuard]},
+  { path: 'user/:userId', component: UserProfileComponent, canActivate: [LoggedInGuard] },
   { path: 'recover', component: RecoverComponent },
   { path: 'login', component: LoginComponent } ,
-  { path: 'messages', component: ChatListComponent } ,
-  { path: 'notifications', component: NotificationsComponent } ,
-  { path: 'messages/:userId', component: ChatComponent } ,
+  { path: 'messages', component: ChatListComponent, canActivate: [LoggedInGuard] } ,
+  { path: 'notifications', component: NotificationsComponent, canActivate: [LoggedInGuard] } ,
+  { path: 'messages/:userId', component: ChatComponent, canActivate: [LoggedInGuard] } ,
   { path:'**', redirectTo: ''}
 ];
 
 
 @NgModule({
   imports: [ RouterModule.forRoot(routes) ],
-  exports: [ RouterModule ]
+  exports: [ RouterModule ],
+  providers: [LoggedInGuard]
 })
 export class AppRoutingModule {}

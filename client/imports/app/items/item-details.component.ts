@@ -1,11 +1,17 @@
-import { Component, OnInit, OnDestroy, AfterViewInit, ViewChild } from '@angular/core';
+import { Component, OnInit, OnDestroy, AfterViewInit, ViewChild, ApplicationRef } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
+import { BehaviorSubject } from 'rxjs';
+
+import 'rxjs/operator/zip';
 import { Subscription } from 'rxjs/Subscription';
 import { Meteor } from 'meteor/meteor';
 import { MeteorObservable } from 'meteor-rxjs';
 import { InjectUser } from "angular2-meteor-accounts-ui";
 import {Router} from '@angular/router';
+import {Counts} from 'meteor/tmeasday:publish-counts';
+
+
 
 import * as _ from 'lodash';
 
@@ -21,6 +27,11 @@ import {MatSnackBar} from '@angular/material';
 
 import template from './item-details.component.html';
 import style from './item-details.component.scss';
+import { Reservations } from '../../../../both/collections/reservations.collection';
+import { setInterval } from 'timers';
+import { Subject } from 'rxjs/Subject';
+
+
 
 @Component({
   selector: 'item-details',
@@ -34,7 +45,7 @@ export class ItemDetailsComponent implements OnInit, OnDestroy {
   itemId: string;
   paramsSub: Subscription;
   item: Item;
-  itemSub: Subscription;
+  itemSub: any;
   users: Observable<User>;
   user: Meteor.User;
   imagesSubs: any;
@@ -45,11 +56,21 @@ export class ItemDetailsComponent implements OnInit, OnDestroy {
   owner:any;
   ownerSub: any;
   userId: any;
+  reservationSub: any;
+  reservationsCount: any = new Subject<number>();
+  reservations: any;
+  reserved: any;
+  reservationsCountSub: any;
+  numberInRow: any;
+  usersSub: any;
+  zip: any;
+  
 
   constructor(
     private route: ActivatedRoute,
     public router: Router,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private ref: ApplicationRef
   ) {}
 
   ngOnInit() {
@@ -68,32 +89,82 @@ export class ItemDetailsComponent implements OnInit, OnDestroy {
           this.itemSub.unsubscribe();
         }
 
-        this.itemSub = MeteorObservable.subscribe('item', this.itemId).subscribe(() => {
-            this.item = Items.findOne({_id:this.itemId},{  
-                transform:(item)=>{
-                  let category = _.filter(this.categories, {_id:item.category})[0];
-                  if(!category){
-                    category = {name:"Be kategorijos"};
+        this.reservationSub = MeteorObservable.subscribe('reservations', this.itemId);
+        this.itemSub = MeteorObservable.subscribe('item', this.itemId);
+        this.usersSub = MeteorObservable.subscribe('users');
+        this.zip = Observable.zip(
+          this.reservationSub,
+          MeteorObservable.subscribe('item_reservations_count', this.itemId),
+          this.usersSub,
+          this.itemSub
+          
+        ).subscribe(()=>{
+
+          if(this.userId){
+
+
+              this.reserved = Reservations.find({owner: this.userId, item: this.itemId, active: true}).map((items)=>{
+                return !!items.length;
+              })
+
+              this.reservations = Reservations.find({item: this.itemId, active: true}).map((reservations)=>{
+                return reservations.map((value, index)=>{ 
+                  let user = Meteor.users.findOne({_id: value.owner});
+                  if(user && user.profile ){
+                    value['name'] = user.profile.name;
                   }
-                  item.category = category;
-                  return item;
+                  return value;                  
+                })
+              });   
+
+              this.numberInRow = Reservations.find({item: this.itemId, active: true}, {sort:{timestamp: 1}}).map((items)=>{
+                console.log('itemai', items);
+                return _.findIndex(items, {owner: this.userId});
+              })
+              MeteorObservable.autorun().subscribe(() => {
+                this.reservationsCount = Counts.get('item_reservations')
+              })              
+              
+              // this.reservationsCount = Counts.get('item_reservations');  
+              
+              // setInterval(()=>{
+                // this.reservationsCount = MeteorObservable.call('getReservationsCount', this.itemId).subscribe(result =>{
+                //   console.log(result);
+                //   this.reservationsCount.next(result);
+                // });
+              // this.reservationsCount = Reservations.find({item: this.itemId, active: true}, {sort:{timestamp: -1}}).map((items)=>{
+              //   console.log('rezervacijos', items);
+              //   return items.length;
+              // })
+              // }, 500);
+            }
+
+            this.item = Items.findOne({_id:this.itemId},{  
+              transform:(item)=>{
+                let category = _.filter(this.categories, {_id:item.category})[0];
+                if(!category){
+                  category = {name:"Be kategorijos"};
                 }
+                item.category = category;
+                return item;
+              }
             });
 
-            if(this.item.owner){
-              this.ownerSub = MeteorObservable.subscribe('user', this.item.owner).subscribe(()=>{
-                this.owner = Users.findOne({_id:this.item.owner});
-              });
-            } 
+            this.owner = Meteor.users.findOne({_id: this.item.owner});
+            
 
             if(this.item.images && this.item.images.length > 0){
               this.imagesSubs = MeteorObservable.subscribe('item_images', this.item.images).subscribe(()=>{
-                this.images = Images.find({}).fetch();
+                for(let image of this.item.images){
+                  this.images.push(Images.findOne({_id:image}))
+                }
                 this.selectedImage = this.images[0];
               });
             }
+
+
+          });
         });
-      });
   }
 
   setPreview(image){
@@ -106,19 +177,25 @@ export class ItemDetailsComponent implements OnInit, OnDestroy {
     if(this.paramsSub){
       this.paramsSub.unsubscribe();
     }
-    if(this.itemSub){
-      this.itemSub.unsubscribe();
-    }
+    this.zip.unsubscribe();
     if(this.imagesSubs){
       this.imagesSubs.unsubscribe();
     }
   }
 
-  deleteItem(){
-    Meteor.call('removeItem', this.itemId, (error, response)=>{
-      this.openSnackBar('Skelbimas sėkmingai ištrintas');
+  reserveItem(){
+    MeteorObservable.call('toggleReservation', this.itemId).toPromise().then(()=>{
+      this.ref.tick();
     });
-    this.router.navigate(['/']);
+  }
+
+  deleteItem(){
+    if(confirm("Ar tikrai norite ištrinti?")){
+      Meteor.call('removeItem', this.itemId, (error, response)=>{
+        this.openSnackBar('Skelbimas sėkmingai ištrintas');
+      });
+      this.router.navigate(['/']);
+    };
   }
 
     openSnackBar(message: string, action: string = null) {

@@ -10,28 +10,45 @@
     <div>
         <mat-form-field>
             
-        <textarea autosize mat-input  rows="2" dividerColor="accent" formControlName="description" placeholder="Aprašymas">
+          <textarea autosize matInput  rows="2" dividerColor="accent" formControlName="description" placeholder="Aprašymas">
         </mat-form-field>
     </div>
     <div>
-        <mat-form-field floatingPlaceholder="false">
+      <mat-form-field floatingPlaceholder="false">
         <input matInput type="text" formControlName="location" id="autocomplete" #autocomplete placeholder="Adresas"/> 
       </mat-input-container>
     </div>
     <div>
-      <mat-select floatingPlaceholder="false" formControlName="category" placeholder="Kategorija">
-        <mat-option *ngFor="let cat of categories|async" [value]="cat._id">{{cat.name}}</mat-option>
-      </mat-select>
+      <mat-form-field  floatingPlaceholder="false">
+        <mat-select formControlName="category" placeholder="Kategorija">
+          <mat-option *ngFor="let cat of categories|async" [value]="cat._id">{{cat.name}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    
+    <div>
+        <mat-form-field  floatingPlaceholder="false">
+                <input [min]="minDate" matInput formControlName="expires_at" [matDatepicker]="picker" placeholder="Galioja iki">
+                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>              
+        </mat-form-field>
+    </div>
+    
+    <div>
+      <mat-checkbox formControlName="reservable">Ijungti rezervacijas</mat-checkbox>
+      <p>Ijungus rezervacijas prie skelbimo atsiras mygtukas "Rezervuoti" ir daikto norinčių žmonių skaičius. Įjungus rekomenduojame aprašyme patikslinti, kam ar keliem iš norinčiųjų atiduosite ir kitas detales.</p>
     </div>
     <image-upload #upload (onFile)="onImage($event)"></image-upload>
-    <div *ngIf="images && images.length > 0" class="item-photos">
-        <div *ngFor="let image of images;let i = index" class="small-image-wrapper">
+    <div *ngIf="images && images.length > 0" class="item-photos" style="display: flex">
+        <div *ngFor="let image of images;let i = index" style="position: relative" class="small-image-wrapper">
             <img (click)="removeImage(i)" class="swiper-image" [src]="getImageUrl(image)">
+            <span color="warn" *ngIf="i != 0" (click)="imageLeft(i)" style="position: absolute; top: 50%; left: 5px; font-weight: bold;" [innerHTML]="'<'"></span>
+            <span color="warn" *ngIf="i < images.length -1" (click)="imageRight(i)" style="position: absolute; top: 50%; right: 5px;color: black; font-weight: bold;" [innerHTML]="'>'"></span>          
         </div>
     </div>
     
     <div style="text-align:center">
-      <button mat-button color="accent"-raised-button type="submit">Išsaugoti skelbimą!</button	>
+      <button mat-button color="accent" mat-raised-button type="submit">Išsaugoti skelbimą!</button	>
     </div>
   </form>
   <div *ngIf="!user">

@@ -1,10 +1,15 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Ng2PaginationModule } from 'ng2-pagination';
 import { provideLazyMapsAPILoaderConfig } from 'angular2-google-maps/core';
 import { AgmCoreModule } from 'angular2-google-maps/core';
+
+import { FileUploadModule } from 'ng2-file-upload';
+
+
 
 import { AppComponent } from "./app.component.web";
 import { AppRoutingModule } from './routing.module';
@@ -14,17 +19,22 @@ import { NOTIFICATIONS_DECLARATIONS } from './notifications';
 import { USER_DECLARATIONS } from './user';
 import { AUTH_DECLARATIONS } from './auth';
 import { MESSAGES_DECLARATIONS } from './messages';
-import { MatSnackBarModule, MatInputModule,MatSelectModule, MatCardModule, MatToolbarModule, MatButtonModule, MatChipsModule, MatMenuModule } from "@angular/material";
+import { MatSnackBarModule, MatInputModule, MatSliderModule, MatSelectModule, MatNativeDateModule, MatDatepickerModule, MatCardModule, MatToolbarModule, MatButtonModule, MatChipsModule, MatMenuModule, MatListModule, MatIconModule,MatCheckboxModule, MatButtonToggleModule, MatDatepicker } from "@angular/material";
 import { SHARED_DECLARATIONS} from "./shared";
 import { FileDropModule } from "angular2-file-drop";
 import { GooglePlaceModule } from './downloaded/ng2-autocomplete/ng2-google-place.module';
 import { TimeAgoPipe } from './pipes/timeAgo.pipe';
+import {UserNamePipe} from './pipes/userName.pipe';
 import { KeysPipe } from './pipes/keys.pipe';
 import { TruncatePipe } from './pipes/truncate.pipe';
 import { Autosize } from './downloaded/autosize/autosize';  
+import { FacebookModule, FacebookService } from 'ngx-facebook';
 import {KSSwiperModule} from 'angular2-swiper';
 // import { Ng2CloudinaryModule } from 'ng2-cloudinary';
 import {AdminModule} from './admin/admin.module'
+
+import {MatGridListModule} from '@angular/material/grid-list';
+
 
 
 
@@ -47,6 +57,20 @@ let moduleDefinition;
       MatChipsModule,
       MatMenuModule,
       MatSelectModule,
+      MatGridListModule,
+      MatListModule, 
+      MatIconModule,
+      MatButtonToggleModule,
+      MatCheckboxModule,
+      MatDatepickerModule,
+      MatNativeDateModule,
+      MatSliderModule,
+
+      FacebookModule.forRoot(),
+
+      BrowserAnimationsModule,
+
+      FileUploadModule,
 
       FormsModule,
       ReactiveFormsModule,
@@ -69,8 +93,9 @@ let moduleDefinition;
       TruncatePipe,
       KeysPipe,
       Autosize,
+      UserNamePipe
     ],
-    providers: [],
+    providers: [FacebookService],
     bootstrap: [AppComponent]
   }
 

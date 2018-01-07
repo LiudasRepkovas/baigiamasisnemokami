@@ -4,8 +4,8 @@
     </mat-toolbar>
     <mat-list>
         <mat-list-item *ngFor="let notification of notifications|async">
-            <mat-icon mat-list-avatar>feedback</mat-icon>
-            <h4 mat-line><a [routerLink]="['/', notification.url]">{{notification.text}}</a></h4>
+            <mat-icon mat-list-icon>feedback</mat-icon>
+            <h4 mat-line><a [routerLink]="'/' + notification.url">{{notification.text}}</a></h4>
             <p mat-line> {{notification.timestamp | amTimeAgo}} </p>
         </mat-list-item>
     </mat-list>

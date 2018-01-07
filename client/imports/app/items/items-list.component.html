@@ -1,5 +1,5 @@
 <div class="item-list">
-    <mat-card class="map">
+    <!-- <mat-card class="map">
       <mat-toolbar class="md-primary" color="primary">
         Skelbimų žemėlapis
       </mat-toolbar>
@@ -19,7 +19,7 @@
           </sebm-google-map-marker>
         </div>
       </sebm-google-map>
-    </mat-card>
+    </mat-card> -->
     <mat-card class="filter-card">
       <mat-toolbar class="md-primary" color="primary">
         Filtruoti skelbimus
@@ -27,20 +27,27 @@
       <form>       
         <mat-grid-list cols="3" rowHeight="65px">
           <mat-grid-tile>
-            <mat-select  [formControl]="categoryInput" (change)="onCategoryChanged($event.target.value)" placeholder="Kategorija">
-              <mat-option value="">
-                Visos kategorijos
-              </mat-option>
-              <mat-option  *ngFor="let category of categories" [value]="category._id">
-                {{category.name}}
-              </mat-option>
-            </mat-select>
+            <mat-form-field floatingPlaceholder="false">
+                <mat-select matInput placeholder="Kategorija" [formControl]="categoryInput" >
+                  
+                  <mat-option>
+                    Visos kategorijos
+                  </mat-option>
+                  <mat-option  *ngFor="let category of categories" [value]="category._id">
+                    {{category.name}}
+                  </mat-option>
+                </mat-select>
+            </mat-form-field>
+            
+            
           </mat-grid-tile>
           <mat-grid-tile>
-            <mat-select [formControl]="orderInput" placeholder="Rikiavimas">
-              <mat-option value=-1>Naujausi viršuje</mat-option>
-              <mat-option value=1>Seniausi viršuje</mat-option>
-            </mat-select>
+              <mat-form-field floatingPlaceholder="false">
+                  <mat-select matInput placeholder="Rikiavimas" [formControl]="orderInput">
+                    <mat-option value="-1">Naujausi viršuje</mat-option>
+                    <mat-option value="1">Seniausi viršuje</mat-option>
+                  </mat-select>
+              </mat-form-field>
           </mat-grid-tile>
           <mat-grid-tile>
               <mat-form-field>
@@ -49,6 +56,26 @@
             </mat-form-field>
           </mat-grid-tile>
         </mat-grid-list>
+        <mat-grid-list cols="3" rowHeight="95px">
+            <mat-grid-tile>
+              <mat-form-field floatingPlaceholder="false">
+                  <input matInput type="text" #autocomplete placeholder="Vieta" [formControl]="cityInput" (change)="cityInputChange($event.target.value)" />
+              </mat-form-field>
+              
+              
+            </mat-grid-tile>
+            <mat-grid-tile>
+              <div>
+                  <span>Paieškos spindulys (km)</span>                  
+              </div>
+              <div>
+                  <mat-slider min='1' max='100' value="30" step='1' [disabled]='!(location | async)' thumbLabel='true' (change)="sliderChanged($event)" displayValue="number"></mat-slider>                  
+              </div>
+            </mat-grid-tile>
+            <mat-grid-tile style="flex-wrap: wrap"> 
+                  <mat-checkbox  [formControl]="imagesInput">Tik su nuotraukomis</mat-checkbox>  
+            </mat-grid-tile>
+          </mat-grid-list>
       </form>
     </mat-card>
     <mat-card class="cards-wrapper" *ngIf="!loading">
@@ -74,6 +101,10 @@
           {{item.description}}
         </mat-card-content>
       </mat-card>
+      <h3 *ngIf="!(items | async)">
+        Skelbimų nerasta, pamėginkite pakeisti paieškos parametrus
+      </h3>
+
         <pagination-controls class="pagination" (pageChange)="onPageChanged($event)"></pagination-controls>
         <mat-spinner *ngIf="loading"></mat-spinner>
     </mat-card>
