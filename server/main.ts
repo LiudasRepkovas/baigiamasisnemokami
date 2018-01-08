@@ -2,6 +2,8 @@ import { Meteor } from 'meteor/meteor';
 
 import {loadCategories} from './imports/fixtures/categories';
 import {Items} from '../both/collections/items.collection';
+import {Notifications} from '../both/collections/notifications.collection';
+
 
 import './methods';
 import './imports/publications/parties';
@@ -35,7 +37,21 @@ Meteor.startup(() => {
         return parser.text('every 30 seconds');
       },
       job: function() {
-        Items.update({expires_at: {$lt: _.now()}}, {$set: {active: false}}, {multi:true} );
+        let items = Items.find({expires_at: {$lt: _.now()}, active: {$ne:false}}).fetch();
+        let ids = [];
+        for(let item of items){
+          ids.push(item._id);
+          Notifications.insert({
+            owner: item.owner,
+            text: "Jūsų skelbimas pavadinimu " + item.name +  "baigė galioti!",
+            url: 'item/id/'+item._id,
+            timestamp: _.now(),
+            seen: false,
+          })
+        }
+
+        Items.update({_id:{$in:ids}}, {$set: {active: false}}, {multi:true});
+
       }
     });
     
@@ -76,6 +92,36 @@ Accounts.onCreateUser(function (options, user) {
     /* else {
         throw new Meteor.Error('no-profile-data', 'No profile data provided.');
         }*/
+});
+Accounts.validateLoginAttempt(function(options) {
+  /* options:
+    type            (String)    The service name, such as "password" or "twitter".
+    allowed         (Boolean)   Whether this login is allowed and will be successful.
+    error           (Error)     When allowed is false, the exception describing why the login failed.
+    user            (Object)    When it is known which user was attempting to login, the Meteor user object.
+    connection      (Object)    The connection object the request came in on.
+    methodName      (String)    The name of the Meteor method being used to login.
+    methodArguments (Array)     An array of the arguments passed to the login method
+  */
+
+  // If the login has failed, just return false.
+  if (!options.allowed) {
+    return false;
+  }
+
+  if (options.user && options.user.profile && options.user.profile.banned) {
+    throw new Meteor.Error('user-banned', 'This account has been disabled. Contact support for more information.');
+  }
+
+  if(options.type == 'resume') {
+    return true;
+  }
+
+  return true;
+
+  // Check the user's email is verified. If users may have multiple
+  // Email addresses (or no email address) you'd need to do something
+  // More complex.
 });
 
 Accounts.registerLoginHandler(function(options) : any {

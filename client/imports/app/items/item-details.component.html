@@ -57,30 +57,42 @@
     <!-- <div  *ngIf="item.reservable && userId && userId == item.owner"> 
         <div>{{ (reserved | async) ? 'Be jūsų rezervavo: ' : 'Jau rezervavo: '}} {{((reservationsCount | async) - (reserved | async))}}</div>        
     </div> -->
-    <div *ngIf="owner && user && item.active" class="author">
+    <div >
+        
         <h3>Autorius:</h3>
-        <div>Vardas: {{owner?.profile?.name}}</div>
-        <div>Telefonas: {{owner?.profile?.phone}}</div>
-        <div>El.paštas: {{owner?.emails[0].address}}</div>
-        <div *ngIf="owner._id != userId && item.active">  
-            <button mat-button color="primary" [routerLink]="['/messages', owner._id]">Rašyti asmeninę žinutę!</a>
+        <div *ngIf="owner && !owner.profile.banned && user && item.active" class="author">
+            <div>Vardas: {{owner?.profile?.name}}</div>
+            <div>Telefonas: {{owner?.profile?.phone}}</div>
+            <div>El.paštas: {{owner?.emails[0].address}}</div>
+            <div *ngIf="owner._id != userId && item.active">  
+                <button mat-button color="primary" [routerLink]="['/messages', owner._id]">Rašyti asmeninę žinutę!</button>
+            </div>
         </div>
-        <h3 *ngIf="!item.active">
-            <strong>DUOMENYS NĖRA RODOMI, NES SKELBIMAS NEBEGALIOJA</strong>
+        <span *ngIf=" user && !owner.profile.banned &&!item.active">
+            DUOMENYS NĖRA RODOMI, NES SKELBIMAS NEBEGALIOJA
+        </span>
+
+        <span *ngIf=" user && item.active && owner.profile.banned">
+            NAUDOTOJO PASKYRA UŽBLOKUOTA
+        </span>
+        
+
+        <h3 *ngIf="!user &&  item.active && !owner.profile.banned">
+            Prisijunk, kad matytum kontaktus
         </h3>
     </div>  
-    <div class="map">
+    <div *ngIf="item.location" class="map">
         <h3>Vieta:</h3>
         <span>Adresas: {{item.address}}</span>
         <sebm-google-map
-            *ngIf="item.location.lat"
+            *ngIf="item.location[0]"
             class="all-items-map" 
-            [latitude]="item.location.lat"
-            [longitude]="item.location.lng"
+            [latitude]="item.location[1]"
+            [longitude]="item.location[0]"
             [zoom]="5">
         <sebm-google-map-marker
-            [latitude]="item.location.lat"
-            [longitude]="item.location.lng">
+            [latitude]="item.location[1]"
+            [longitude]="item.location[0]">
         </sebm-google-map-marker>
         </sebm-google-map>
     </div>

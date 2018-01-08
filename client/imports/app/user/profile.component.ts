@@ -5,7 +5,7 @@ import { Subscription } from 'rxjs/Subscription';
 import { Meteor } from 'meteor/meteor';
 import { MeteorObservable } from 'meteor-rxjs';
 import { InjectUser } from "angular2-meteor-accounts-ui";
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import * as _ from 'lodash';
 import {MatSnackBar} from '@angular/material';
 
@@ -45,6 +45,10 @@ export class UserProfileComponent implements OnInit, OnDestroy {
   images: any;
   categories:any;
   categoriesSub:any;
+
+  selectInput = new FormControl(1);
+  searchInput = new FormControl('');
+  
 
   items:any;
   itemsSub:any;
@@ -88,20 +92,56 @@ export class UserProfileComponent implements OnInit, OnDestroy {
               this.addForm.controls['email'].setValue(this.userDisplayed.emails[0].address);
             }
 
+            
+
             this.itemsSub = MeteorObservable.subscribe('user_items', this.userDisplayed._id).subscribe(()=>{
-                this.items = Items.find({owner: this.userId}, {sort:{timestamp:-1}, transform:(item)=>{
-                    let category = _.filter(this.categories, {_id:item.category})[0];
-                    if(!category){
-                        category = {name:"Be kategorijos"};
-                    }
-                    item.category = category;
-                    return item;
+
+              
+              Observable.combineLatest(
+                this.selectInput.valueChanges,
+                this.searchInput.valueChanges
+              ).subscribe((values)=>{
+
+                console.log(values);
+                let query = {
+                  owner: this.userId
+                }
+
+                if(values[1] ){
+                  query['name'] = {
+                    $regex: values[1]
+                  }
+                }
+
+                if(values[0] == 2) {
+                  query['active'] = {$ne: false};
+                }
+                
+                if(values[0] == 3) {
+                  query['active'] = {$ne: true};
+                }
+
+                this.items = Items.find(query, {sort:{timestamp:-1}, transform:(item)=>{
+                  let category = _.filter(this.categories, {_id:item.category})[0];
+                  if(!category){
+                      category = {name:"Be kategorijos"};
+                  }
+                  item.category = category;
+                  return item;
                 }});
-                console.log(this.items.toArray());
+
+                console.log(this.items.fetch());
+  
+              })
+                
+              this.selectInput.setValue(2);
+              this.searchInput.setValue("");
             });
         });
       });
-  }
+
+  
+    }
 
   ngOnDestroy() {
     this.paramsSub.unsubscribe();

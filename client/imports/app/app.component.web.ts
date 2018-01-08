@@ -28,14 +28,13 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit(){
-    if(Meteor.userId()){
       this.autorunSub = MeteorObservable.autorun().subscribe(() => {
         this.messagesSub = MeteorObservable.subscribe('unread_messages_count').subscribe();
         this.notificationsSub = MeteorObservable.subscribe('unread_notifications_count').subscribe();
         this.notifications = Counts.get('notifications_count');
         this.messages = Counts.get('messages_count');
       });
-    }
+
   }
 
   logout() {

@@ -2,6 +2,10 @@ import { Meteor } from 'meteor/meteor';
 
 import { Parties } from '../../../both/collections/parties.collection';
 
+Meteor.users.deny({
+  update() { return true; }
+})
+
 Meteor.publish('uninvited', function (partyId: string) {
   const party = Parties.findOne(partyId);
 

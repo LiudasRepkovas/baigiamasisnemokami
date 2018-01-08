@@ -29,7 +29,7 @@ export class ItemFormComponent implements OnInit, OnDestroy {
   @ViewChildren('autocomplete') autocompleteInput : QueryList<ElementRef>;
   addForm: FormGroup;
   images: any[] = [];
-  location: any ;
+  location: any = null;
   address: any = "Vilnius, Lithuania";
   categories: any;
   loading: boolean = true;
@@ -52,17 +52,15 @@ export class ItemFormComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(){
-
-    this.location = {lat: 54.687157, lng: 25.279652};
     //TODO:padaryt kad lauktu kol suras useri bl
     //TODO:sutvarkyt kad gautu userio lokacija
 
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition((position)=>{
-            this.location = {
-              lat: position.coords.latitude,
-              lng: position.coords.longitude
-            };
+            this.location = [
+              position.coords.longitude,
+              position.coords.latitude
+            ];
         });
     } 
 
@@ -202,7 +200,9 @@ export class ItemFormComponent implements OnInit, OnDestroy {
         });
       }      
     } else {
+      console.log(this.images);
       this.openSnackBar("Užpildykite visus formos laukus!");
+      console.log(this.images);
     }
   }
 
@@ -227,6 +227,9 @@ export class ItemFormComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(){
     this.imagesSubs.unsubscribe();
+    if(this.itemSub){
+      this.itemSub.unsubscribe()
+    }
   }
 
   openSnackBar(message: string, action: string = null) {

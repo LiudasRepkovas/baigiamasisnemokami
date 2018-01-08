@@ -26,7 +26,7 @@ Meteor.methods({
       throw new Meteor.Error('expires-in-the-past', "Item can not expire in the past");
     }
 
-    item.timestamp = _.now();
+    item['timestamp'] = _.now();
     item['updated'] = null;
 
     Items.insert(item);
@@ -41,12 +41,14 @@ Meteor.methods({
     return true;
   },
 
-  updateItem(item){
+  updateItem(item : any){
     if(item.owner == this.userId){
       item.updated = _.now();
       if(item.expires_at > _.now()){
         item.active = true;        
       }
+      let old_item = Items.findOne({_id:item._id});
+      item.timestamp = old_item.timestamp;
       Items.update({_id:item._id, owner:this.userId}, item);
     }
     return true;
@@ -153,5 +155,37 @@ Meteor.methods({
     if(this.userId){
       return Reservations.find({ item: item_id, active: true}).fetch().length;      
     }
+  },
+
+  removeCategory(id){
+    let user = Meteor.users.findOne({_id:this.userId});
+    if(user && user.profile && user.profile.admin){
+      Items.update({category: id}, {'category': null}, {multi:true});
+      Categories.remove({_id:id});
+    }
+  },
+  
+  addCategory(name){
+    let user = Meteor.users.findOne({_id:this.userId});
+    if(user && user.profile && user.profile.admin){
+      Categories.insert({parent: null, name});
+    }
+  },
+
+  banUser(id){
+    let user = Meteor.users.findOne({_id:this.userId});
+    if(user && user.profile && user.profile.admin){
+      Meteor.users.update({_id:id}, {$set:{"profile.banned": true, 'services.resume': null}});
+      Items.update({owner: id}, {$set: {active: false}}, {multi: true});
+      Reservations.remove({owner: id});
+    }
   }
 });
+
+function isBanned(userId){
+  let user = Meteor.users.findOne({_id:userId})
+  if(user && user.profile && user.profile.banned){
+    return true;
+  }
+  return false;
+}

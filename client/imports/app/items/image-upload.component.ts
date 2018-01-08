@@ -1,4 +1,4 @@
-import {Component, OnInit, EventEmitter, Output} from '@angular/core';
+import {Component, OnInit, EventEmitter, Output, ViewChild} from '@angular/core';
 
 import template from './image-upload.component.html';
 import style from './image-upload.component.scss';
@@ -22,6 +22,8 @@ export class ImageUploadComponent implements OnInit {
   thumbsSubscription: Subscription;
   thumbs: Observable<Thumb[]>;
   @Output() onFile: EventEmitter<string> = new EventEmitter<string>();
+  @ViewChild('input') fileInput : QueryList<ElementRef>;
+  
 
   constructor() {}
 
@@ -79,6 +81,8 @@ export class ImageUploadComponent implements OnInit {
           console.log(`Something went wrong!`, error);
         });
       }
+      console.log(this.fileInput);
+      this.fileInput.nativeElement.value = "";
     }
    
   }

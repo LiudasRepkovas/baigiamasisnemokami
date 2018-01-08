@@ -9,5 +9,5 @@
             <p mat-line> {{notification.timestamp | amTimeAgo}} </p>
         </mat-list-item>
     </mat-list>
-    <h2 *ngIf="notifications && (notifications | async)?.length==0">Pranešimų nėra</h2>
+    <h2 *ngIf="!(notifications | async)">Pranešimų nėra</h2>
 </mat-card>

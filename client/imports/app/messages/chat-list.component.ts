@@ -28,7 +28,7 @@ export class ChatListComponent implements OnInit, OnDestroy {
     paramsSub: Subscription;
     messagesSub: any;
     messages: any;
-    messageGroups: any;
+    messageGroups: any = [];
     users: any;
     user: Meteor.User;
     usersSub: any;
@@ -62,6 +62,8 @@ export class ChatListComponent implements OnInit, OnDestroy {
             })
         })
         })
+
+        console.log(this.messageGroups);
         
         
     }

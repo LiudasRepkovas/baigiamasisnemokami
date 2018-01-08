@@ -49,7 +49,7 @@ export class ItemDetailsComponent implements OnInit, OnDestroy {
   users: Observable<User>;
   user: Meteor.User;
   imagesSubs: any;
-  images: any;
+  images: any = [];
   selectedImage:any;
   categories:any;
   categoriesSub:any;
@@ -156,6 +156,7 @@ export class ItemDetailsComponent implements OnInit, OnDestroy {
             if(this.item.images && this.item.images.length > 0){
               this.imagesSubs = MeteorObservable.subscribe('item_images', this.item.images).subscribe(()=>{
                 for(let image of this.item.images){
+                  console.log(Images.findOne({_id:image}))
                   this.images.push(Images.findOne({_id:image}))
                 }
                 this.selectedImage = this.images[0];

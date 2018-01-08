@@ -50,8 +50,7 @@
               </mat-form-field>
           </mat-grid-tile>
           <mat-grid-tile>
-              <mat-form-field>
-                  
+            <mat-form-field>
               <input matInput placeholder="Paieškos tekstas" type="text" [formControl]="searchInput"/>
             </mat-form-field>
           </mat-grid-tile>
@@ -98,7 +97,7 @@
           </div>
       	</mat-card-subtitle>
         <mat-card-content>	
-          {{item.description}}
+          {{(item.description.length > 100)? (item.description | slice:0:100)+'..':(item.description)}}
         </mat-card-content>
       </mat-card>
       <h3 *ngIf="!(items | async)">

@@ -1,7 +1,7 @@
 <mat-card class="form-center">
   <h2 *ngIf="!item">Naujas skelbimas</h2>
   <h2 *ngIf="item">Atnaujinti skelbimą</h2>
-  <form *ngIf="!loading && user" [formGroup]="addForm" (ngSubmit)="addItem(); upload.reset(); resetImages();" (keydown.enter)="$event.preventDefault()">
+  <form *ngIf="!loading && user" [formGroup]="addForm" (ngSubmit)="addItem(); upload.reset();" (keydown.enter)="$event.preventDefault()">
     <div>
         <mat-form-field>   
         <input matInput dividerColor="accent" formControlName="name" placeholder="Pavadinimas">

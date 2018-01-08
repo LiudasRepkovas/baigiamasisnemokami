@@ -1,8 +1,11 @@
 <div>
     <div style="border-bottom:1px solid black;" class="comment" *ngFor="let comment of comments | async">
         <div style="display:inline-block; float:left; margin-top: 5px;">
-            <strong>
+            <strong *ngIf="!comment.owner?.profile?.banned">
                 {{comment.owner.profile.name}}({{comment.owner.emails[0].address}}):
+            </strong>
+            <strong *ngIf="comment.owner?.profile?.banned">
+               [[PASKYRA UŽBLOKUOTA]]:
             </strong>
             <span *ngIf="user?.profile.admin" (click)="deleteComment(comment._id)" style="color:red; cursor: pointer; text-decoration:underline">trinti</span>
         </div>

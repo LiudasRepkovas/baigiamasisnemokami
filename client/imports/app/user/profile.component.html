@@ -2,13 +2,13 @@
     <mat-toolbar class="md-primary" color="primary">
         Naudotojo profilis
     </mat-toolbar>
-    <div *ngIf="userDisplayed && user._id != userDisplayed._id" >
+    <div *ngIf="userDisplayed && user?._id != userDisplayed?._id"  >
         <h2>Vardas: {{userDisplayed.profile.name}}</h2>
         <h2>Telefono numeris: {{userDisplayed.profile.phone}}</h2>
         <h2>El.paštas: {{userDisplayed.emails[0].address}}</h2>
         <a mat-button [routerLink]="['/messages', userDisplayed._id]">Rašyti asmeninę žinutę</a> 
     </div>    
-    <form *ngIf="userDisplayed && user._id == userDisplayed._id" [formGroup]="addForm" (ngSubmit)="saveProfileData();" (keydown.enter)="$event.preventDefault()">
+    <form *ngIf="userDisplayed && user?._id == userDisplayed?._id" [formGroup]="addForm" (ngSubmit)="saveProfileData();" (keydown.enter)="$event.preventDefault()">
         <div class="formyte">
             <div>
                 <mat-form-field>        
@@ -39,6 +39,29 @@
     <mat-toolbar  class="md-primary"  color="primary">
         Naudotojo skelbimai
     </mat-toolbar>
+    <mat-card class="filter-card">
+            <mat-toolbar class="md-primary" color="primary">
+              Filtruoti skelbimus
+            </mat-toolbar>
+            <form>       
+              <mat-grid-list cols="2" rowHeight="65px">
+                <mat-grid-tile>
+                    <mat-form-field floatingPlaceholder="false">
+                        <mat-select matInput placeholder="Rodyti" [formControl]="selectInput">
+                          <mat-option value="">Visus</mat-option>
+                          <mat-option value="2">Tik aktyvius</mat-option>
+                          <mat-option value="3">Tik neaktyvius</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </mat-grid-tile>
+                <mat-grid-tile>
+                  <mat-form-field>
+                    <input matInput placeholder="Paieškos tekstas" type="text" [formControl]="searchInput"/>
+                  </mat-form-field>
+                </mat-grid-tile>
+              </mat-grid-list>
+            </form>
+          </mat-card>
     <div class="cards-wrapper">
         <mat-card *ngFor="let item of items|async" class="item-card">
             <mat-card-title>

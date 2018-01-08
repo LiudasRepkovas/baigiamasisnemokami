@@ -11,29 +11,17 @@ import {
 import {Globals} from './global.service';
 
 @Injectable()
-export class AdminGuard implements CanActivate, CanActivateChild, CanLoad {
-  constructor(public globals: Globals, private router: Router) {}
+export class AdminGuard implements CanActivate{
+  constructor(private router: Router) {}
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) : boolean {
-    let url: string = state.url;
-    return this.checkAdmin(url);
-  }
-
-  canActivateChild(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
-    return this.canActivate(route, state);
-  }
-
-  canLoad(route: Route): boolean {
-    let url = `/${route.path}`;
-    console.log(this.checkAdmin(url));
-    return this.checkAdmin(url);
-  }
-
-  checkAdmin(url: string): boolean {
-    let result = this.globals.isAdmin();
-    if(result == false){
-      // this.router.navigateByUrl('/login');
-    }
-    return true;
+    // let result = !!Meteor.userId();
+    // let isAdmin = false;
+    // if(!result){
+    //     this.router.navigate(['/']);
+    // } else {
+    //   isAdmin = Meteor.user().profile.admin;
+    // }
+    // return isAdmin;
   }
 }

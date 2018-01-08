@@ -12,6 +12,10 @@ Meteor.publish('user_notifications', function() {
 });
 
 Meteor.publish('unread_notifications_count', function(){
-    Counts.publish(this, 'notifications_count', Notifications.collection.find({owner:this.userId, seen:false}));
+
+    if(this.userId){
+        Counts.publish(this, 'notifications_count', Notifications.collection.find({owner:this.userId, seen:false}));
+    }
+    this.ready()
 
 })

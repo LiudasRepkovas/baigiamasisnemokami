@@ -5,6 +5,6 @@
        (onFileDrop)="onFileDrop($event)">
       
     <div>Tempkite nuotraukas čia</div>
-    <input type="file" multiple style="opacity: 0; font-size: 100px; top: 0; right: 0; position: absolute;  cursor: pointer;" (change)="onFileInputChange($event.target.files)"/>
+    <input #input type="file" multiple style="opacity: 0; font-size: 100px; top: 0; right: 0; position: absolute;  cursor: pointer;" (change)="onFileInputChange($event.target.files)"/>
   </div>
 </div>

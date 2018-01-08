@@ -14,18 +14,6 @@ const adminRoutes: Routes = [
     path: 'admin',
     component: AdminComponent,
     canActivate: [AdminGuard],
-    children: [
-      {
-        path: '',
-        canActivateChild: [AdminGuard],
-        children: [
-          {path: '', component: AdminIndexComponent},
-          {path: 'users', component: AdminUsersComponent},
-          {path: 'users/edit/:id', component: AdminEditUserComponent},
-          {path: 'users/create', component: AdminCreateUserComponent},
-        ]
-      }
-    ]
   }
 ];
 

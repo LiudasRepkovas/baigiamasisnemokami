@@ -1,0 +1,35 @@
+<mat-card *ngIf="user?.profile?.admin" class="form-center">
+        <h2>Kategorijos</h2>
+        <mat-list>
+
+                <mat-list-item role="listitem" *ngFor="let cat of categories|async">
+                    <h4 matLine>{{cat.name}}</h4> 
+                    
+                    <button mat-icon-button (click)="removeCategory(cat._id)">
+                       <mat-icon>delete</mat-icon>
+                    </button>
+                </mat-list-item>
+                
+        </mat-list>
+
+        <mat-grid-list cols="3" rowHeight="95px">
+                <mat-grid-tile>
+                  <mat-form-field floatingPlaceholder="false">
+                      <input matInput type="text" placeholder="Pavadinimas" [formControl]="catInput"/>
+                  </mat-form-field>
+                </mat-grid-tile>
+                <mat-grid-tile>
+                    <!-- <mat-form-field  floatingPlaceholder="false">
+                        <mat-select [formControl]="parent" placeholder="Tėvinė kategoriją">
+                            <mat-option value="">Aukščiausio</mat-option>                                
+                            <mat-option *ngFor="let cat of categories|async" [value]="cat._id">{{cat.name}}</mat-option>
+                        </mat-select>
+                    </mat-form-field> -->
+                    <button mat-button (click)="addCategory()">Sukurti kategoriją</button>
+                </mat-grid-tile>
+              </mat-grid-list>
+
+        
+              
+</mat-card>
+      

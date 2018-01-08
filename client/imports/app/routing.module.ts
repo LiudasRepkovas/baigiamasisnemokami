@@ -13,8 +13,13 @@ import { LoginComponent } from './auth/login.component.web';
 import { ChatListComponent } from './messages/chat-list.component';
 import { ChatComponent } from './messages/chat.component';
 import { NotificationsComponent } from './notifications/notifications.component';
+import { CategoriesComponent } from './adminstuff/categories';
+import { UserListComponent } from './adminstuff/users';
+
+
 
 import {LoggedInGuard} from './services/loggedIn.guard.service';
+import {AdminGuard} from './services/admin.guard.service';
 
 
 export let routes: Routes = [
@@ -30,6 +35,8 @@ export let routes: Routes = [
   { path: 'messages', component: ChatListComponent, canActivate: [LoggedInGuard] } ,
   { path: 'notifications', component: NotificationsComponent, canActivate: [LoggedInGuard] } ,
   { path: 'messages/:userId', component: ChatComponent, canActivate: [LoggedInGuard] } ,
+  { path: 'admin/categories', component: CategoriesComponent } ,  
+  { path: 'admin/users', component: UserListComponent } ,  
   { path:'**', redirectTo: ''}
 ];
 

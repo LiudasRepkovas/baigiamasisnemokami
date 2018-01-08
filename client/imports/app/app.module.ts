@@ -35,6 +35,12 @@ import {AdminModule} from './admin/admin.module'
 
 import {MatGridListModule} from '@angular/material/grid-list';
 
+import {CategoriesComponent} from '../app/adminstuff/categories';
+import {UserListComponent} from '../app/adminstuff/users';
+
+import { Categories } from '../../../both/collections/categories.collection';
+
+
 
 
 
@@ -93,7 +99,9 @@ let moduleDefinition;
       TruncatePipe,
       KeysPipe,
       Autosize,
-      UserNamePipe
+      CategoriesComponent,
+      UserNamePipe,
+      UserListComponent
     ],
     providers: [FacebookService],
     bootstrap: [AppComponent]
