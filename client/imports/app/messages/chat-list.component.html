@@ -18,7 +18,7 @@
             </div>
                 <!--{{group.value[0].from.profile.name}} ({{group.value[0].from.emails[0].address}})-->
         </div>
-        <h2 *ngIf="!messageGroups.length">Susirašinėjimų nėra</h2>
+        <h2 *ngIf="!(messageGroups|keys).length">Susirašinėjimų nėra</h2>
         
     </div>
     <div *ngIf="!user">
